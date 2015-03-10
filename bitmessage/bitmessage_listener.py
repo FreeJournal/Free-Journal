@@ -1,6 +1,4 @@
-from config.config import *
-import sys
-import os
+from global_imports import *
 
 
 def process_collection(collection):
@@ -22,9 +20,4 @@ def get_collections():
             process_collection(new_collection)
 
 if __name__ == '__main__':
-    sys.path.append("..")
-    path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    sys.path.insert(1, path)
-    from collection_handler import CollectionHandler
-
     get_collections()

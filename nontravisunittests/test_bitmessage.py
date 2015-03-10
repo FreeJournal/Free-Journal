@@ -37,7 +37,7 @@ class TestBitmessage(unittest.TestCase):
 
         ack_data = self.bitmessage.send_broadcast(address, subject, message)
 
-        timeout = 300  # 5 minutes
+        timeout = 600  # 10 minutes
         start_time = time.time()
         curr_time = time.time()
 
@@ -60,7 +60,7 @@ class TestBitmessage(unittest.TestCase):
 
         ack_data = self.bitmessage.send_message(address, address, subject, message)
 
-        timeout = 300  # 5 minutes
+        timeout = 600  # 10 minutes
         start_time = time.time()
         curr_time = time.time()
 

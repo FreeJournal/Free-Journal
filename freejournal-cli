@@ -1,0 +1,70 @@
+#!/usr/bin/python
+
+import sys
+
+import freenet
+from freenet import FreenetConnection
+
+def print_help():
+    """ Print usage instructions for the command-line library. """
+    print "Usage: ./freejournal [command]"
+    print "./freejournal_cli help [command name] - display extended command information.\n"
+    print "Available commands:"
+    print "\tgetdocfile [document hash] [document output path]"
+    print "\tputdoc [document input path]"
+    print "\tlistcollections"
+    print "\tshowcollection [index bitmessage ID]"
+    print "\tputcollection [document IDs, comma separated] [name] [description] [keywords] " \
+            + "[Bitcoin address (for rating)]"
+
+def print_command_help(command):
+    """ Display extended help information for CLI command
+        :param command: FreeJournal command name"""
+    COMMANDS = \
+        { "getdocfile": \
+            "Get a document with given hash from the FreeJournal network storage.", \
+          "putdoc": \
+            "Add a document to the FreeJournal network storage and create the local" \
+            + " corresponding document object, displaying the document ID required " \
+            + " to retreive the document with the configured key.  To publish, " \
+            + " call pubcollection with the returned document ID.", \
+          "listcollections": \
+            "List all document indexes currently known to this FreeJournal instance.", \
+          "showcollection": \
+            "Display all known details of a given collection, including all documents it indexes.", \
+          "putcollection": \
+            "Create a new collection and publish it to the FreeJournal network." \
+        }
+    if command in COMMANDS:
+        print COMMANDS[command]
+    else:
+        print "Unknown command!"
+        print_help()
+
+def get_doc_file(document_hash, document_output_path):
+    pass
+
+def process_command(command):
+    """ Process a command-line command and execute the 
+        resulting FreeJournal action
+        :param command: The command to be executed, as a sys arg array
+    """
+    if len(sys.argv) < 3:
+        print_help()
+        return
+    command = sys.argv[1].lower()
+    if command == 'help':
+        if (len(sys.argv) == 3):
+            print_command_help(sys.argv[2])
+        else:
+            print_help()
+    elif command == 'getdocfile':
+        if (len(sys.argv) == 4):
+            get_doc_file(sys.argv[2], sys.argv[3])
+        else:
+            print_help()
+    else:
+            print_help()
+
+if __name__ == '__main__':
+    process_command(sys.argv)

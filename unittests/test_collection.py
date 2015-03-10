@@ -1,5 +1,5 @@
 import unittest
-from collection import Collection
+from backend.datastructures.collection import Collection
 
 
 class TestCollection(unittest.TestCase):
