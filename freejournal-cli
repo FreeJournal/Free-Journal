@@ -52,7 +52,7 @@ def print_help():
     print "./freejournal_cli help [command name] - display extended command information.\n"
     print "Available commands:"
     print "\tgetdocfile [document hash] [document output path/filename]"
-    print "\tputdoc [document input path]"
+    print "\tputdoc [document file path] [collection address] [title] [description]"
     print "\tlistcollections"
     print "\tlisten"
     print "\tinstall [freenet|bitmessage|all]"
@@ -107,6 +107,11 @@ def list_collections():
     for collection in cache.get_all_collections():
         print "\tID " + collection.address + "\t " + collection.title + \
             "\tCreation Date " + collection.creation_date.strftime("%A, %d. %B %Y %I:%M%p")
+        print("\t" +"~~~~~~~~~~~~~~~Document list~~~~~~~~~~~~~~~")
+        print("\t\t" + "URI" + "\t" + "Title" + "\t" + "Description")
+        documents = cache.get_documents_from_collection(collection.address)
+        for doc in documents:
+            print("\t\t" + doc.hash + "\t" + doc.title +  "\t" + doc.description)
 
 def list_collection_details(collection_address):
     collection = cache.get_collection_with_address(collection_address)
@@ -135,14 +140,29 @@ def install_dependencies(dependency):
             apt_install()
             print 'Installation Completed'
 
-def put_document(file_path):
-    """ Put a document to the Freenet network
+def put_document(file_path, collection_address, title, description):
+    """ Insert a document into the local cache with associated information
+        and upload the document to the freenet network.
         :param file_path: the path of the file to upload
+        :param collection_address: the collection address associated with the document
+        :param title: the title of the document being uploaded
+        :param description: the description of the document being uploaded
     """
+    file_name = file_path.rsplit('/',1)[0]
     contents = open(file_path).read()
     freeCon = FreenetConnection()
     uri = freeCon.put(contents)
+    document = Document(
+        collection_address = collection_address,
+        description = description,
+        hash = uri,
+        title = title,
+        filename = file_name,
+        accesses = 0
+    )
+    cache.insert_new_document(document)
     print "Inserted " + file_path + " successfully with URI " + uri
+    print "Allow up to 10 minutes for file to propogate on the freenet network"
 
 def put_collection(address_password, document_ids, title, description, keywords, btc):
     """ Create a collection in local cache
@@ -172,8 +192,23 @@ def put_collection(address_password, document_ids, title, description, keywords,
         oldest_date=datetime.datetime.now()
     )
     cache.insert_new_collection(collection)
-    print "Document inserted with address/ID " + address
+    print "Collection inserted with address/ID " + address
 
+
+def show_collection(collection_address):
+    '''
+    Displays information about a specific collection, including a document list
+    :param collection_address: Collection address
+    '''
+    collection = cache.get_collection_with_address(collection_address)
+
+    print "\tID " + collection.address + "\t " + collection.title + \
+            "\tCreation Date " + collection.creation_date.strftime("%A, %d. %B %Y %I:%M%p")
+    print("\t" +"~~~~~~~~~~~~~~~"+ "Document list"+"~~~~~~~~~~~~~~~")
+    print("\t\t" + "URI" + "\t" + "Title" + "\t" + "Description")
+    documents = cache.get_documents_from_collection(collection_address)
+    for doc in documents:
+        print("\t\t" + doc.hash + "\t" + doc.title +  "\t" + doc.description)
 
 def publish_collection(address_password, collection_address):
     bitmessage_connection = Bitmessage()
@@ -207,12 +242,17 @@ def process_command(command):
         else:
             print_help()
     elif command == 'putdoc':
-        if (len(sys.argv) == 3):
-            put_document(sys.argv[2])
+        if (len(sys.argv)== 6):
+            put_document(sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5])
         else:
             print_help()
     elif command == 'listcollections':
         list_collections()
+    elif command == 'showcollection':
+        if (len(sys.argv)==3):
+            show_collection(sys.argv[2])
+        else:
+            print_help()
     elif command == 'listen':
         get_collections()
     elif command == 'install':
