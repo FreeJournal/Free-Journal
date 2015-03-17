@@ -106,6 +106,9 @@ class Collection(DecBase):
 
 
     def update_timestamp (self):
+        """
+        Updates the Collection's oldest_date, oldest_btc_tx, latest_btc_tx with any new timestamp.
+        """
         timestamp_obj = TimestampFile(self.merkle)
         date_check = timestamp_obj.check_timestamp()
         curr_time = date_check['time']
