@@ -5,14 +5,19 @@ from models.document import Document
 from models.keyword import Keyword
 from jsonschema import *
 from json_schemas import *
+from models.hash import Hash 
 import json
 
 # Define foreign keys required for joining defined tables together
 keyword_association = Table('collection_keywords', DecBase.metadata,
                             Column('keyword_id', Integer, ForeignKey('keyword.id')),
-                            Column('collection_address', String, ForeignKey('collection.address'))
+                            Column('collection_address', String, ForeignKey('collection.address'))                           
                             )
 
+hash_association = Table('collection_hashes', DecBase.metadata,
+                            Column('hash', String, ForeignKey('hash.hash')),
+                            Column('collection_address', String, ForeignKey('collection.address'))                           
+                            )
 
 class Collection(DecBase):
     """ A Collection is the fundamental unit of organization in the FreeJournal network.
@@ -61,6 +66,7 @@ class Collection(DecBase):
     accesses = Column(Integer, nullable=False, default=0)
     votes = Column(Integer, nullable=False, default=0)
     votes_last_checked = Column(DateTime)
+    hashes = relationship(Hash,  backref="collection", lazy='dynamic', secondary=hash_association)
 
     def to_json(self):
         """
@@ -121,3 +127,5 @@ class Collection(DecBase):
                 new_key_list.append(new_keywords[i])
             i += 1
         self.keywords.extend(new_key_list)
+
+
