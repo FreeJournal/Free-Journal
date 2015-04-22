@@ -41,7 +41,8 @@ parser_listversions.add_argument("-d", "--documents", action="store_true", dest=
 parser_listen = subparsers.add_parser("listen", help="start the long-running FreeJournal listener")
 
 parser_install = subparsers.add_parser("install", help="install FreeJournal dependencies")
-parser_install.add_argument("deps", choices=["freenet", "bitmessage", "all"], help="dependencies to install")
+parser_install.add_argument("deps", choices=["freenet", "bitmessage", "rabbitmq", "all"],
+                            help="dependencies to install")
 
 # showcollection
 parser_showcollection = subparsers.add_parser("showcollection", help="display all known details of a given collection,"

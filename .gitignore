@@ -8,3 +8,5 @@ docs/src
 *.db
 .vagrant
 Vagrantfile
+celerybeat-schedule
+celerybeat.pid

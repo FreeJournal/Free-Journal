@@ -8,6 +8,8 @@ from bitmessage.install import apt_install, windows_install
 # FreeNet installer imports
 from freenet.install import linux_install
 
+from tasks.install import rabbitmq_install
+
 try:
     from controllers import collections
 except:
@@ -103,6 +105,12 @@ def install_dependencies(dependency):
             raise Exception("Invalid Operating System. See README.")
         else:
             linux_install()
+    if dependency == 'rabbitmq' or dependency == 'all':
+        os = sys.platform
+        if 'linux' not in os:
+            raise Exception("Invalid Operating System. See README.")
+        else:
+            rabbitmq_install()
     if dependency == 'bitmessage' or dependency == 'all':
         os_version = platform.dist()[0]
         if 'windows' in os_version:
