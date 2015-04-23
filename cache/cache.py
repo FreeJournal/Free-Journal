@@ -2,10 +2,10 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import MetaData
 from db import setup_db, connect_db
-from models.collection import Collection
-from models.document import Document
-from models.collection_version import CollectionVersion
-from models.keyword import Keyword
+from .models.collection import Collection
+from .models.document import Document
+from .models.collection_version import CollectionVersion
+from .models.keyword import Keyword
 
 engine = connect_db()
 setup_db(engine)
@@ -14,12 +14,14 @@ meta = MetaData(bind=engine)
 
 
 class Cache():
+
     """
     A Cache is an object used to communicate with the sqlalchemy database and store FreeJournal data locally
 
     Attributes:
         session: the sqlalchemy session for this Cache
     """
+
     def __init__(self):
         """
         Create a new database session to support
@@ -42,7 +44,8 @@ class Cache():
         """
         row = None
         try:
-            row = self.session.query(Collection).filter(Collection.address == address).one()
+            row = self.session.query(Collection).filter(
+                Collection.address == address).one()
         except NoResultFound:
             pass
         return row
@@ -55,7 +58,8 @@ class Cache():
         """
         row = None
         try:
-            row = self.session.query(Keyword).filter(Keyword.id == cur_id).one()
+            row = self.session.query(Keyword).filter(
+                Keyword.id == cur_id).one()
         except NoResultFound:
             pass
         return row
@@ -68,20 +72,23 @@ class Cache():
         """
         row = None
         try:
-            row = self.session.query(Document).filter(Document.hash == hash).one()
+            row = self.session.query(Document).filter(
+                Document.hash == hash).one()
         except NoResultFound:
             pass
         return row
 
     def get_documents_from_collection(self, collection_address):
-        collections = self.session.query(Document).filter(Document.collection_address == collection_address).all()
+        collections = self.session.query(Document).filter(
+            Document.collection_address == collection_address).all()
         return collections
 
     def get_versions_for_collection(self, collection_address):
-        versions = self.session.query(CollectionVersion).filter(CollectionVersion.collection_address== collection_address).all()
+        versions = self.session.query(CollectionVersion).filter(
+            CollectionVersion.collection_address == collection_address).all()
         return versions
 
-    def insert_new_collection(self,collection):
+    def insert_new_collection(self, collection):
         """
         Insert a new collection into local storage
         :param collection: Collection object to insert into local storage
@@ -89,8 +96,9 @@ class Cache():
         self.session.add(collection)
         self.session.commit()
 
-    #Note, if this is called manually(and not via cli/api) the collection root hash will not be updated
-    def insert_new_document(self,document):
+    # Note, if this is called manually(and not via cli/api) the collection
+    # root hash will not be updated
+    def insert_new_document(self, document):
         """
         Insert a new document associated with an existing collection into local storage
         :param document: Document object to insert into local storage

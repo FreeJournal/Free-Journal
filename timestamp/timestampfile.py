@@ -10,7 +10,7 @@ class TimestampFile:
 
     def __init__(self, file_hash):
         self.file_hash = file_hash
-    
+
     @property
     def request_timestamp(self):
         """
@@ -45,9 +45,10 @@ class TimestampFile:
         """
         params = {'d': self.file_hash}
         r = requests.post(status_url, data=params, timeout=10)
-        returnval = {'timestamp': False, 'time': "", 'Transaction': "" }
+        returnval = {'timestamp': False, 'time': "", 'Transaction': ""}
         if r.status_code != 200:
-            print("Error: HTTP Status Code " + r.status_code + ". " + "The request was not succeeded, expected staus code '200'. \n")
+            print("Error: HTTP Status Code " + r.status_code + ". " +
+                  "The request was not succeeded, expected staus code '200'. \n")
             return -1
         text = r.json()
         if text['success'] is False:
@@ -56,18 +57,20 @@ class TimestampFile:
             r = requests.post(status_url, data=params)
             text = r.json()
             if text['status'] == 'pending':
-                print("Your payment has been received. Please wait at least 1 minute for your payment to be certified. \n")
+                print(
+                    "Your payment has been received. Please wait at least 1 minute for your payment to be certified. \n")
                 time_out_count = 0
                 while text['status'] == 'pending':
                     if time_out_count > 10:
-                        print("Maximum 10 minute time limit exceeded. Transaction not confirmed. \n")
+                        print(
+                            "Maximum 10 minute time limit exceeded. Transaction not confirmed. \n")
                         return -1
                     time_out_count += 1
                     time.sleep(60)
                     r = requests.post(status_url, data=params)
                     text = r.json()
                     if text['status'] == 'confirmed':
-                        returnval['timestamp']=True
+                        returnval['timestamp'] = True
                     else:
                         return -1
             if text['status'] == 'confirmed':

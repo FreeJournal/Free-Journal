@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
-from models import DecBase
-import config
+from .models import DecBase
+from . import config
 
 
 def connect_db():

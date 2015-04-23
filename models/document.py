@@ -1,8 +1,9 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
-from models import DecBase
+from .models import DecBase
 
 
 class Document(DecBase):
+
     """ A document represents a single document shared to the network.
         Documents are indexed by tuples contained in their respective collections.
         Documents are stored and retreived from the Freenet network using the hashes

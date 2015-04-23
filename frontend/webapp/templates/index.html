@@ -6,34 +6,34 @@ FreeJournal
 
 {% block content %}
 <div class="container">
-	<img src="public/img/logo.png" class="logo"/>
-	{% for collection in collections %}
-	<div class="listing">
-		<div class="listing-vote">
-			<a href="#" class="vote-triangle vote-triangle-up"></a>
-			<div class="vote-score">+200</div>
-			<a href="#" class="vote-triangle vote-triangle-down"></a>
-		</div>
-		<img src="public/img/document.png" class="listing-icon"/>
-		<div class="listing-info-block">
-			<div class="listing-title">
-				<a href="#">{{collection.title}}</a>
-			</div>
-			<div class="listing-info">
-				<div class="listing-date">
-					{{collection.creation_date.strftime("%A, %d. %B %Y %I:%M%p")}}
-				</div>
-				<div class="listing-submitter">
-					Submitted by <a href="#">{{collection.address}}</a>
-				</div>
-			</div>
-		</div>
-		<div class="listing-keywords">
-			{% for keyword in collection.keywords %}
-			<a href="#">{{keyword.name}}</a>{% if not loop.last %},{% endif %}
-			{% endfor %}
-		</div>
-	</div>
-	{% endfor %}
+    <img src="public/img/logo.png" class="logo"/>
+    {% for collection in collections %}
+    <div class="listing">
+        <div class="listing-vote">
+            <a href="#" class="vote-triangle vote-triangle-up"></a>
+            <div class="vote-score">+200</div>
+            <a href="#" class="vote-triangle vote-triangle-down"></a>
+        </div>
+        <img src="public/img/document.png" class="listing-icon"/>
+        <div class="listing-info-block">
+            <div class="listing-title">
+                <a href="#">{{collection.title}}</a>
+            </div>
+            <div class="listing-info">
+                <div class="listing-date">
+                    {{collection.creation_date.strftime("%A, %d. %B %Y %I:%M%p")}}
+                </div>
+                <div class="listing-submitter">
+                    Submitted by <a href="#">{{collection.address}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="listing-keywords">
+            {% for keyword in collection.keywords %}
+            <a href="#">{{keyword.name}}</a>{% if not loop.last %},{% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

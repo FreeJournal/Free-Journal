@@ -1,25 +1,25 @@
 coll_schema = {
-        "type": "object",
+    "type": "object",
 
-        "properties": {
+    "properties": {
             "type_id": {
                 "type": "integer"
             },
-            "title": {
-                "type": "string"
-            },
-            "description": {
-                "type": "string"
-            },
-            "address": {
-                "type": "string"
-            },
-            "btc": {
-                "type": ["string", "null"]
-            },
-            "keywords": {
-                "type": "array",
-                "items": {
+        "title": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "address": {
+            "type": "string"
+        },
+        "btc": {
+            "type": ["string", "null"]
+        },
+        "keywords": {
+            "type": "array",
+            "items": {
                     "type": "object",
                     "properties": {
                         "id": {
@@ -29,12 +29,12 @@ coll_schema = {
                             "type": "string"
                         }
                     },
-                    "required": ["id", "name"]
-                }
-            },
-            "documents": {
-                "type": "array",
-                "items": {
+                "required": ["id", "name"]
+            }
+        },
+        "documents": {
+            "type": "array",
+            "items": {
                     "type": "object",
                     "properties": {
                         "address": {
@@ -56,38 +56,44 @@ coll_schema = {
                             "type": "integer"
                         }
                     },
-                    "required": ["address", "hash", "title", "description", "filename", "accesses"]
+                "required": [
+                    "address",
+                    "hash",
+                    "title",
+                    "description",
+                    "filename",
+                    "accesses"]
 
-                }
-            },
-            "latest_broadcast_date": {
-                "type": "string"
-            },
-            "creation_date": {
-                "type": "string"
-            },
-            "oldest_date": {
-                "type": "string"
-            },
-            "latest_btc_tx": {
-                "type": ["string", "null"]
-            },
-            "oldest_btc_tx": {
-                "type": ["string", "null"]
-            },
-            "accesses": {
-                "type": "integer"
-            },
-            "votes": {
-                "type": "integer"
-            },
-            "votes_last_checked": {
-                "type": ["string", "null"]
             }
         },
-        "required": ["type_id", "title", "description", "documents", "keywords", "address",
-                     "creation_date", "oldest_date",
-                     "latest_broadcast_date", "accesses", "votes"]
+        "latest_broadcast_date": {
+            "type": "string"
+        },
+        "creation_date": {
+            "type": "string"
+        },
+        "oldest_date": {
+            "type": "string"
+        },
+        "latest_btc_tx": {
+            "type": ["string", "null"]
+        },
+        "oldest_btc_tx": {
+            "type": ["string", "null"]
+        },
+        "accesses": {
+            "type": "integer"
+        },
+        "votes": {
+            "type": "integer"
+        },
+        "votes_last_checked": {
+            "type": ["string", "null"]
+        }
+    },
+    "required": ["type_id", "title", "description", "documents", "keywords", "address",
+                 "creation_date", "oldest_date",
+                 "latest_broadcast_date", "accesses", "votes"]
 }
 
 fj_schema = {
@@ -112,5 +118,11 @@ fj_schema = {
             "type": "string"
         },
     },
-    "required": ["protocol", "type_id", "original_sender", "signature", "time_created", "pubkey"]
+    "required": [
+        "protocol",
+        "type_id",
+        "original_sender",
+        "signature",
+        "time_created",
+        "pubkey"]
 }

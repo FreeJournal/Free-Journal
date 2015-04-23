@@ -1,13 +1,13 @@
-from models.keyword import Keyword
-from models.document import Document
-from models.collection import Collection
-from bitmessage.bitmessage import Bitmessage
-from models.fj_message import FJMessage
-from cache.cache import Cache
-from config import DOCUMENT_DIRECTORY_PATH
-from freenet.FreenetConnection import FreenetConnection
+from .models.keyword import Keyword
+from .models.document import Document
+from .models.collection import Collection
+from .bitmessage.bitmessage import Bitmessage
+from .models.fj_message import FJMessage
+from .cache.cache import Cache
+from .config import DOCUMENT_DIRECTORY_PATH
+from .freenet.FreenetConnection import FreenetConnection
 from jsonschema import *
-from models.json_schemas import *
+from .models.json_schemas import *
 from sqlalchemy.exc import IntegrityError
 from random import randint
 import json
@@ -32,7 +32,8 @@ class Controller:
         :param fj_message: the message containing the collection and signature
         :return: True if the signatures match, False otherwise
         """
-        h = hashlib.sha256(fj_message["pubkey"] + fj_message['payload']).hexdigest()
+        h = hashlib.sha256(
+            fj_message["pubkey"] + fj_message['payload']).hexdigest()
 
         if h == fj_message["signature"]:
             print "Signature Verified"
@@ -40,7 +41,6 @@ class Controller:
         else:
             print "Signature Not Verified"
             return False
-
 
     def _build_docs_keywords(self, payload):
         """
@@ -63,8 +63,11 @@ class Controller:
             if db_doc is not None:
                 docs.append(db_doc)
             else:
-                docs.append(Document(collection_address=doc["address"], description=doc["description"],
-                                     hash=doc["hash"], title=doc["title"]))
+                docs.append(
+                    Document(
+                        collection_address=doc[
+                            "address"], description=doc["description"],
+                        hash=doc["hash"], title=doc["title"]))
         return docs, keywords
 
     def _save_document(self, data, file_name):
@@ -92,10 +95,10 @@ class Controller:
         :param hash: the Content Hash Key for a document
         :return: the file data if successful, None otherwise
         """
-        
+
         data = None
 
-        #Try obtaining a freenet connection
+        # Try obtaining a freenet connection
         try:
             freenet_connection = FreenetConnection()
         except Exception as e:
@@ -119,7 +122,8 @@ class Controller:
         """
 
         for document in documents:
-            #Create a new file name out of a hash to deal with possible naming conflicts
+            # Create a new file name out of a hash to deal with possible naming
+            # conflicts
             file_name = document.filename
             if not document.filename:
                 file_name = document.title + str(randint(0, 100))
@@ -128,7 +132,7 @@ class Controller:
             hash_name = hashlib.sha256(name + str(randint(0, 100))).hexdigest()
             new_file_name = hash_name + extension
 
-            #Save the new file name to the cache so it can be viewed later
+            # Save the new file name to the cache so it can be viewed later
             document.filename = new_file_name
             self.cache.insert_new_document(document)
 
@@ -147,19 +151,20 @@ class Controller:
 
         doc_counter = 0
         for document in documents:
-            #Store and validate that the document has a file name
+            # Store and validate that the document has a file name
             file_name = document.filename
             if not file_name:
                 file_name = collection_title + str(doc_counter)
                 doc_counter += 1
 
-            #Try obtaining the file data from freenet
+            # Try obtaining the file data from freenet
             data = self._get_document(document.hash)
             if not data:
                 print("Couldn't download " + file_name + " from freenet")
                 continue
 
-            #If the file data was successfully downloaded, save the data to disk
+            # If the file data was successfully downloaded, save the data to
+            # disk
             success = self._save_document(data, file_name)
             if success:
                 print("Successfully downloaded " + file_name + " from freenet")
@@ -176,9 +181,11 @@ class Controller:
         :param message: the Bitmessage message containing an FJ_message
         :param payload: the contents of the FJ_message
         """
-        # Grabbing the text representations of the documents and keywords and rebuilding them
+        # Grabbing the text representations of the documents and keywords and
+        # rebuilding them
         docs, keywords = self._build_docs_keywords(payload)
-        cached_collection = self.cache.get_collection_with_address(payload["address"])
+        cached_collection = self.cache.get_collection_with_address(
+            payload["address"])
 
         if cached_collection is None:
             collection_model = Collection(
@@ -188,16 +195,21 @@ class Controller:
                 btc=payload["btc"],
                 keywords=keywords,
                 documents=docs,
-                creation_date=datetime.datetime.strptime(payload["creation_date"], "%A, %d. %B %Y %I:%M%p"),
-                oldest_date=datetime.datetime.strptime(payload["oldest_date"], "%A, %d. %B %Y %I:%M%p"),
-                latest_broadcast_date=datetime.datetime.strptime(payload["latest_broadcast_date"], "%A, %d. %B %Y %I:%M%p"),
+                creation_date=datetime.datetime.strptime(
+                    payload["creation_date"], "%A, %d. %B %Y %I:%M%p"),
+                oldest_date=datetime.datetime.strptime(
+                    payload["oldest_date"], "%A, %d. %B %Y %I:%M%p"),
+                latest_broadcast_date=datetime.datetime.strptime(
+                    payload["latest_broadcast_date"], "%A, %d. %B %Y %I:%M%p"),
                 votes=payload['votes'],
-                votes_last_checked=datetime.datetime.strptime(payload["votes_last_checked"], "%A, %d. %B %Y %I:%M%p"),
+                votes_last_checked=datetime.datetime.strptime(
+                    payload["votes_last_checked"], "%A, %d. %B %Y %I:%M%p"),
             )
             try:
                 self.cache.insert_new_collection(collection_model)
                 self._hash_document_filenames(collection_model.documents)
-                thread.start_new_thread(self._download_documents, (collection_model.title, collection_model.documents))
+                thread.start_new_thread(self._download_documents, (
+                    collection_model.title, collection_model.documents))
                 print "Cached New Collection"
                 return True
             except IntegrityError as m:
@@ -210,17 +222,22 @@ class Controller:
             cached_collection.address = payload["address"]
             cached_collection.btc = payload["btc"]
             cached_collection.documents = docs
-            cached_collection.creation_date = datetime.datetime.strptime(payload["creation_date"],
-                                                                         "%A, %d. %B %Y %I:%M%p")
-            cached_collection.oldest_date = datetime.datetime.strptime(payload["oldest_date"], "%A, %d. %B %Y %I:%M%p")
-            cached_collection.latest_broadcast_date = datetime.datetime.strptime(payload["latest_broadcast_date"],
-                                                                                 "%A, %d. %B %Y %I:%M%p")
+            cached_collection.creation_date = datetime.datetime.strptime(
+                payload["creation_date"],
+                "%A, %d. %B %Y %I:%M%p")
+            cached_collection.oldest_date = datetime.datetime.strptime(
+                payload["oldest_date"], "%A, %d. %B %Y %I:%M%p")
+            cached_collection.latest_broadcast_date = datetime.datetime.strptime(
+                payload["latest_broadcast_date"],
+                "%A, %d. %B %Y %I:%M%p")
             cached_collection.votes = payload['votes']
-            cached_collection.votes_last_checked = datetime.datetime.strptime(payload["votes_last_checked"], "%A, %d. %B %Y %I:%M%p")
+            cached_collection.votes_last_checked = datetime.datetime.strptime(
+                payload["votes_last_checked"], "%A, %d. %B %Y %I:%M%p")
             try:
                 self.cache.insert_new_collection(cached_collection)
                 self._hash_document_filenames(cached_collection.documents)
-                thread.start_new_thread(self._download_documents, (cached_collection.title, cached_collection.documents))
+                thread.start_new_thread(self._download_documents, (
+                    cached_collection.title, cached_collection.documents))
                 print "Cached Updated Collection"
                 return True
             except IntegrityError as m:
@@ -261,7 +278,7 @@ class Controller:
                     json_decode = json.loads(base64_decode)
                     validate(json_decode, fj_schema)
                 except (ValueError, TypeError, ValidationError) as m:
-                    #print m.message
+                    # print m.message
                     print "Not a FJ Message or Invalid FJ Message"
                     self.connection.delete_message(message['msgid'])
                     continue
@@ -283,7 +300,7 @@ class Controller:
                             self.connection.delete_message(message['msgid'])
                             return True
 
-        #print "Could not import collection"
+        # print "Could not import collection"
         return False
 
     def publish_collection(self, collection, to_address, from_address=None):
@@ -309,7 +326,6 @@ class Controller:
         sendable_fj_message = new_fj_message.to_json()
         if sendable_fj_message is None:
             return False
-        self.connection.send_message(to_address, from_address, "subject", sendable_fj_message)
+        self.connection.send_message(
+            to_address, from_address, "subject", sendable_fj_message)
         return True
-
-

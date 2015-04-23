@@ -1,4 +1,5 @@
-from frontend.webapp import celery
+from .frontend.webapp import celery
+
 
 @celery.task()
 def add_together(a, b):

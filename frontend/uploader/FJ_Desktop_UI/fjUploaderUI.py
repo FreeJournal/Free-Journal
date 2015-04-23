@@ -17,19 +17,24 @@ except AttributeError:
 
 try:
     _encoding = QtGui.QApplication.UnicodeUTF8
+
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
+
 class Ui_FJ_Uploader_Main_Window(object):
+
     def setupUi(self, FJ_Uploader_Main_Window):
-        FJ_Uploader_Main_Window.setObjectName(_fromUtf8("FJ_Uploader_Main_Window"))
+        FJ_Uploader_Main_Window.setObjectName(
+            _fromUtf8("FJ_Uploader_Main_Window"))
         FJ_Uploader_Main_Window.resize(673, 567)
         FJ_Uploader_Main_Window.setMinimumSize(QtCore.QSize(400, 300))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/Images/FreeJournal_icon.jpg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(
+            QtGui.QPixmap(_fromUtf8(":/Images/FreeJournal_icon.jpg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         FJ_Uploader_Main_Window.setWindowIcon(icon)
         FJ_Uploader_Main_Window.setAutoFillBackground(False)
         FJ_Uploader_Main_Window.setDocumentMode(False)
@@ -39,7 +44,8 @@ class Ui_FJ_Uploader_Main_Window(object):
         self.gridLayout_8 = QtGui.QGridLayout(self.centralwidget)
         self.gridLayout_8.setObjectName(_fromUtf8("gridLayout_8"))
         self.horizontalLayoutPerform = QtGui.QHBoxLayout()
-        self.horizontalLayoutPerform.setObjectName(_fromUtf8("horizontalLayoutPerform"))
+        self.horizontalLayoutPerform.setObjectName(
+            _fromUtf8("horizontalLayoutPerform"))
         self.pushButtonNew = QtGui.QPushButton(self.centralwidget)
         self.pushButtonNew.setDefault(False)
         self.pushButtonNew.setObjectName(_fromUtf8("pushButtonNew"))
@@ -74,10 +80,13 @@ class Ui_FJ_Uploader_Main_Window(object):
         self.gridLayoutModify.addWidget(self.pushButtonAdd, 0, 0, 1, 1)
         self.gridLayout_8.addLayout(self.gridLayoutModify, 0, 1, 1, 1)
         self.gridLayoutCollections = QtGui.QGridLayout()
-        self.gridLayoutCollections.setObjectName(_fromUtf8("gridLayoutCollections"))
+        self.gridLayoutCollections.setObjectName(
+            _fromUtf8("gridLayoutCollections"))
         self.treeWidgetCollections = QtGui.QTreeWidget(self.centralwidget)
-        self.treeWidgetCollections.setObjectName(_fromUtf8("treeWidgetCollections"))
-        self.gridLayoutCollections.addWidget(self.treeWidgetCollections, 1, 0, 1, 1)
+        self.treeWidgetCollections.setObjectName(
+            _fromUtf8("treeWidgetCollections"))
+        self.gridLayoutCollections.addWidget(
+            self.treeWidgetCollections, 1, 0, 1, 1)
         self.labelCollections = QtGui.QLabel(self.centralwidget)
         self.labelCollections.setObjectName(_fromUtf8("labelCollections"))
         self.gridLayoutCollections.addWidget(self.labelCollections, 0, 0, 1, 1)
@@ -92,7 +101,8 @@ class Ui_FJ_Uploader_Main_Window(object):
         self.gridLayoutLocal.addWidget(self.labelLocal, 0, 0, 1, 1)
         self.gridLayout_8.addLayout(self.gridLayoutLocal, 0, 0, 1, 1)
         self.horizontalLayoutOut = QtGui.QHBoxLayout()
-        self.horizontalLayoutOut.setObjectName(_fromUtf8("horizontalLayoutOut"))
+        self.horizontalLayoutOut.setObjectName(
+            _fromUtf8("horizontalLayoutOut"))
         self.labelOut = QtGui.QLabel(self.centralwidget)
         self.labelOut.setObjectName(_fromUtf8("labelOut"))
         self.horizontalLayoutOut.addWidget(self.labelOut)
@@ -116,18 +126,24 @@ class Ui_FJ_Uploader_Main_Window(object):
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
         FJ_Uploader_Main_Window.setStatusBar(self.statusbar)
         self.actionView_Documentation = QtGui.QAction(FJ_Uploader_Main_Window)
-        self.actionView_Documentation.setObjectName(_fromUtf8("actionView_Documentation"))
+        self.actionView_Documentation.setObjectName(
+            _fromUtf8("actionView_Documentation"))
         self.actionAbout_Free_Journal = QtGui.QAction(FJ_Uploader_Main_Window)
-        self.actionAbout_Free_Journal.setObjectName(_fromUtf8("actionAbout_Free_Journal"))
+        self.actionAbout_Free_Journal.setObjectName(
+            _fromUtf8("actionAbout_Free_Journal"))
         self.actionNew_Collection = QtGui.QAction(FJ_Uploader_Main_Window)
-        self.actionNew_Collection.setObjectName(_fromUtf8("actionNew_Collection"))
+        self.actionNew_Collection.setObjectName(
+            _fromUtf8("actionNew_Collection"))
         self.actionQuit_FJ = QtGui.QAction(FJ_Uploader_Main_Window)
         self.actionQuit_FJ.setCheckable(False)
         self.actionQuit_FJ.setObjectName(_fromUtf8("actionQuit_FJ"))
-        self.actionFree_Journal_Website = QtGui.QAction(FJ_Uploader_Main_Window)
-        self.actionFree_Journal_Website.setObjectName(_fromUtf8("actionFree_Journal_Website"))
+        self.actionFree_Journal_Website = QtGui.QAction(
+            FJ_Uploader_Main_Window)
+        self.actionFree_Journal_Website.setObjectName(
+            _fromUtf8("actionFree_Journal_Website"))
         self.actionGitHub_Source = QtGui.QAction(FJ_Uploader_Main_Window)
-        self.actionGitHub_Source.setObjectName(_fromUtf8("actionGitHub_Source"))
+        self.actionGitHub_Source.setObjectName(
+            _fromUtf8("actionGitHub_Source"))
         self.actionPrefernces = QtGui.QAction(FJ_Uploader_Main_Window)
         self.actionPrefernces.setObjectName(_fromUtf8("actionPrefernces"))
         self.menuFile.addAction(self.actionNew_Collection)
@@ -144,35 +160,62 @@ class Ui_FJ_Uploader_Main_Window(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(FJ_Uploader_Main_Window)
-        QtCore.QObject.connect(self.actionQuit_FJ, QtCore.SIGNAL(_fromUtf8("triggered()")), FJ_Uploader_Main_Window.close)
+        QtCore.QObject.connect(self.actionQuit_FJ, QtCore.SIGNAL(
+            _fromUtf8("triggered()")), FJ_Uploader_Main_Window.close)
         QtCore.QMetaObject.connectSlotsByName(FJ_Uploader_Main_Window)
 
     def retranslateUi(self, FJ_Uploader_Main_Window):
-        FJ_Uploader_Main_Window.setWindowTitle(_translate("FJ_Uploader_Main_Window", "Free Journal Uploader", None))
-        self.pushButtonNew.setText(_translate("FJ_Uploader_Main_Window", "New", None))
-        self.pushButtonDelete.setText(_translate("FJ_Uploader_Main_Window", "Delete", None))
-        self.pushButtonPublish.setText(_translate("FJ_Uploader_Main_Window", "Publish", None))
-        self.pushButtonRemove.setText(_translate("FJ_Uploader_Main_Window", "<<<", None))
-        self.pushButtonAdd.setText(_translate("FJ_Uploader_Main_Window", ">>>", None))
-        self.treeWidgetCollections.headerItem().setText(0, _translate("FJ_Uploader_Main_Window", "Name", None))
-        self.treeWidgetCollections.headerItem().setText(1, _translate("FJ_Uploader_Main_Window", "Address", None))
-        self.treeWidgetCollections.headerItem().setText(2, _translate("FJ_Uploader_Main_Window", "URI", None))
-        self.treeWidgetCollections.headerItem().setText(3, _translate("FJ_Uploader_Main_Window", "Title", None))
-        self.treeWidgetCollections.headerItem().setText(4, _translate("FJ_Uploader_Main_Window", "Description", None))
-        self.treeWidgetCollections.headerItem().setText(5, _translate("FJ_Uploader_Main_Window", "Date Created", None))
-        self.labelCollections.setText(_translate("FJ_Uploader_Main_Window", "Collections", None))
-        self.labelLocal.setText(_translate("FJ_Uploader_Main_Window", "Local Directory", None))
-        self.labelOut.setText(_translate("FJ_Uploader_Main_Window", "Output:", None))
-        self.menuFile.setTitle(_translate("FJ_Uploader_Main_Window", "File", None))
-        self.menuHelp.setTitle(_translate("FJ_Uploader_Main_Window", "Help", None))
-        self.menuEdit.setTitle(_translate("FJ_Uploader_Main_Window", "Edit", None))
-        self.actionView_Documentation.setText(_translate("FJ_Uploader_Main_Window", "View Documentation", None))
-        self.actionView_Documentation.setShortcut(_translate("FJ_Uploader_Main_Window", "F1", None))
-        self.actionAbout_Free_Journal.setText(_translate("FJ_Uploader_Main_Window", "About Free Journal", None))
-        self.actionNew_Collection.setText(_translate("FJ_Uploader_Main_Window", "New Collection...", None))
-        self.actionQuit_FJ.setText(_translate("FJ_Uploader_Main_Window", "Quit", None))
-        self.actionFree_Journal_Website.setText(_translate("FJ_Uploader_Main_Window", "Free Journal Website", None))
-        self.actionGitHub_Source.setText(_translate("FJ_Uploader_Main_Window", "View Source Code", None))
-        self.actionPrefernces.setText(_translate("FJ_Uploader_Main_Window", "Preferences...", None))
+        FJ_Uploader_Main_Window.setWindowTitle(
+            _translate("FJ_Uploader_Main_Window", "Free Journal Uploader", None))
+        self.pushButtonNew.setText(
+            _translate("FJ_Uploader_Main_Window", "New", None))
+        self.pushButtonDelete.setText(
+            _translate("FJ_Uploader_Main_Window", "Delete", None))
+        self.pushButtonPublish.setText(
+            _translate("FJ_Uploader_Main_Window", "Publish", None))
+        self.pushButtonRemove.setText(
+            _translate("FJ_Uploader_Main_Window", "<<<", None))
+        self.pushButtonAdd.setText(
+            _translate("FJ_Uploader_Main_Window", ">>>", None))
+        self.treeWidgetCollections.headerItem().setText(
+            0, _translate("FJ_Uploader_Main_Window", "Name", None))
+        self.treeWidgetCollections.headerItem().setText(
+            1, _translate("FJ_Uploader_Main_Window", "Address", None))
+        self.treeWidgetCollections.headerItem().setText(
+            2, _translate("FJ_Uploader_Main_Window", "URI", None))
+        self.treeWidgetCollections.headerItem().setText(
+            3, _translate("FJ_Uploader_Main_Window", "Title", None))
+        self.treeWidgetCollections.headerItem().setText(
+            4, _translate("FJ_Uploader_Main_Window", "Description", None))
+        self.treeWidgetCollections.headerItem().setText(
+            5, _translate("FJ_Uploader_Main_Window", "Date Created", None))
+        self.labelCollections.setText(
+            _translate("FJ_Uploader_Main_Window", "Collections", None))
+        self.labelLocal.setText(
+            _translate("FJ_Uploader_Main_Window", "Local Directory", None))
+        self.labelOut.setText(
+            _translate("FJ_Uploader_Main_Window", "Output:", None))
+        self.menuFile.setTitle(
+            _translate("FJ_Uploader_Main_Window", "File", None))
+        self.menuHelp.setTitle(
+            _translate("FJ_Uploader_Main_Window", "Help", None))
+        self.menuEdit.setTitle(
+            _translate("FJ_Uploader_Main_Window", "Edit", None))
+        self.actionView_Documentation.setText(
+            _translate("FJ_Uploader_Main_Window", "View Documentation", None))
+        self.actionView_Documentation.setShortcut(
+            _translate("FJ_Uploader_Main_Window", "F1", None))
+        self.actionAbout_Free_Journal.setText(
+            _translate("FJ_Uploader_Main_Window", "About Free Journal", None))
+        self.actionNew_Collection.setText(
+            _translate("FJ_Uploader_Main_Window", "New Collection...", None))
+        self.actionQuit_FJ.setText(
+            _translate("FJ_Uploader_Main_Window", "Quit", None))
+        self.actionFree_Journal_Website.setText(
+            _translate("FJ_Uploader_Main_Window", "Free Journal Website", None))
+        self.actionGitHub_Source.setText(
+            _translate("FJ_Uploader_Main_Window", "View Source Code", None))
+        self.actionPrefernces.setText(
+            _translate("FJ_Uploader_Main_Window", "Preferences...", None))
 
-from frontend.uploader import resources_rc
+from .frontend.uploader import resources_rc

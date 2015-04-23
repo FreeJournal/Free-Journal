@@ -1,9 +1,8 @@
 from flask import Flask, render_template, send_from_directory, g
-from make_celery import make_celery
+from .make_celery import make_celery
 from datetime import timedelta
 import datetime
-from cache.cache import Cache
-
+from .cache.cache import Cache
 
 
 app = Flask(__name__, static_folder='public')
@@ -36,8 +35,8 @@ def teardown_cache(exception):
         cache.close()
 
 
-from tasks.add_task import add_together
-from tasks.periodic_test import add_test
+from .tasks.add_task import add_together
+from .tasks.periodic_test import add_test
 
 documents = [
     {

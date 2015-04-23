@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from frontend.cli import commands
+from .frontend.cli import commands
 import sys
 
 if __name__ == '__main__':

@@ -1,59 +1,91 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Text, DateTime, Table
 from sqlalchemy.orm import relationship, backref
-from models import DecBase
-from models.document import Document
+from .models import DecBase
+from .models.document import Document
 from jsonschema import *
 from json_schemas import *
-from models.collection_version import CollectionVersion 
-from timestamp.timestampfile import TimestampFile
+from .models.collection_version import CollectionVersion
+from .timestamp.timestampfile import TimestampFile
 import time
 import json
 
 # Define foreign keys required for joining defined tables together
-collection_keywords = Table('collection_keywords', DecBase.metadata,
-                            Column('keyword_id', Integer, ForeignKey('keyword.id')),
-                            Column('collection_address', String, ForeignKey('collection.address'))                           
+collection_keywords = Table('collection_keywords',
+                            DecBase.metadata,
+                            Column(
+                                'keyword_id',
+                                Integer, ForeignKey('keyword.id')),
+                            Column(
+                                'collection_address',
+                                String, ForeignKey('collection.address'))
                             )
 
-hash_association = Table('collection_hashes', DecBase.metadata,
-                            Column('hash', String, ForeignKey('collection_version.root_hash')),
-                            Column('collection_address', String, ForeignKey('collection.address'))                           
-                            )
+hash_association = Table('collection_hashes',
+                         DecBase.metadata,
+                         Column('hash',
+                                String,
+                                ForeignKey(
+                                'collection_version.root_hash')),
+                         Column(
+                         'collection_address',
+                         String,
+                         ForeignKey('collection.address'))
+                         )
+
 
 class Collection(DecBase):
-    """ A Collection is the fundamental unit of organization in the FreeJournal network.
-        A Collection is a uniquely identifiable set of documents.  Each collection is associated
-        with and signed by a BitMessage broadcast channel address.  Each collection contains
-        a list of documents, a Bitcoin address for ranking, and a version.  Messages on the network
-        called DocIndex messages share the state of a collection at a given version.
 
-        This class stores the latest version of each collection the FreeJournal node decides to mirror.
-        It also stores old timestamps and Merkle trees for bookkeeping purposes (@todo).
+    """ A Collection is the fundamental unit of organization in the
+        FreeJournal network.
+        A Collection is a uniquely identifiable set of documents.
+        Each collection is associated with and signed by a BitMessage
+        broadcast channel address.
+        Each collection contains a list of documents, a Bitcoin
+        address for ranking, and a version.
+        Messages on the network called DocIndex messages share the
+        state of a collection at a given version.
+
+        This class stores the latest version of each collection the
+        FreeJournal node decides to mirror.
+        It also stores old timestamps and Merkle trees for bookkeeping
+        purposes (@todo).
 
         Attributes:
             title: Title of collection (as in message spec)
             description: Collection description (as in message spec)
-            address: Bitmessage address uniquely ID'ing collection (as in message spec)
+            address: Bitmessage address uniquely ID'ing collection
+                     (as in message spec)
             btc: Bitcoin address for rating documents (as in message spec)
-            keywords: Keywords as list of Keyword class for searching (as in message spec)
-            documents: List of document classes included in the collection (as in message spec)
-            latest_broadcast_date: The date that this collection was last seen broadcasted in the Main Channel
-            creation_date: Earliest known timestamp of collection, or if none earliest approximation of creation date of
-                current version of collection
-            oldest_date: Earliest known timestamp of collection, or if none earliest approximation of creation date of
-                any version of collection
-            latest_btc_tx: Latest Bitcoin transaction timestamping merkle belonging to this collection
-            oldest_btc_tx: Oldest Bitcoin transaction timestamping merkle belonging to this collection
-            accesses: Number of times this collection is accessed by a user of this node (for cache pruning)
-            votes: Latest vote count from the Bitcoin network, used to rank collection
-            votes_last_checked: Latest poll of Bitcoin network for collection votes, to coordinate internal repolling
+                 keywords: Keywords as list of Keyword class for searching
+                (as in message spec)
+            documents: List of document classes included in the collection
+                       (as in message spec)
+            latest_broadcast_date: The date that this collection was last
+                                   seen broadcasted in the Main Channel
+            creation_date: Earliest known timestamp of collection, or if none
+                           earliest approximation of creation date of current
+                           version of collection
+            oldest_date: Earliest known timestamp of collection, or if none
+                         earliest approximation of creation date of any version
+                         of collection
+            latest_btc_tx: Latest Bitcoin transaction timestamping merkle
+                           belonging to this collection
+            oldest_btc_tx: Oldest Bitcoin transaction timestamping merkle
+                           belonging to this collection
+            accesses: Number of times this collection is accessed by a user
+                      of this node (for cache pruning)
+            votes: Latest vote count from the Bitcoin network,
+                   used to rank collection
+            votes_last_checked: Latest poll of Bitcoin network for collection
+                                votes, to coordinate internal repolling
     """
     __tablename__ = 'collection'
     title = Column(Text, nullable=False)
     description = Column(String)
     address = Column(String, primary_key=True)
     btc = Column(String)
-    keywords = relationship("Keyword", secondary=collection_keywords, backref='collection')
+    keywords = relationship(
+        "Keyword", secondary=collection_keywords, backref='collection')
     documents = relationship(Document, cascade="all, delete-orphan")
     latest_broadcast_date = Column(DateTime, nullable=False)
     creation_date = Column(DateTime, nullable=False)
@@ -63,7 +95,9 @@ class Collection(DecBase):
     accesses = Column(Integer, nullable=False, default=0)
     votes = Column(Integer, nullable=False, default=0)
     votes_last_checked = Column(DateTime)
-    version_list = relationship(CollectionVersion,  backref="collection", lazy='dynamic', secondary=hash_association)
+    version_list = relationship(
+        CollectionVersion, backref="collection", lazy='dynamic', secondary=hash_association)
+
     def to_json(self):
         """
         Encodes a Collection as a json representation so it can be sent through the bitmessage network
@@ -71,8 +105,9 @@ class Collection(DecBase):
         """
         json_docs = []
         for doc in self.documents:
-            json_docs.append({"address": doc.collection_address, "description": doc.description, "title": doc.title,
-                              "hash": doc.hash, "filename": doc.filename, "accesses": doc.accesses})
+            json_docs.append(
+                {"address": doc.collection_address, "description": doc.description, "title": doc.title,
+                 "hash": doc.hash, "filename": doc.filename, "accesses": doc.accesses})
 
         json_keywords = []
         for key in self.keywords:
@@ -84,9 +119,15 @@ class Collection(DecBase):
                                "address": self.address,
                                "documents": json_docs,
                                "btc": self.btc,
-                               "latest_broadcast_date": self.latest_broadcast_date.strftime("%A, %d. %B %Y %I:%M%p"),
-                               "creation_date": self.creation_date.strftime("%A, %d. %B %Y %I:%M%p"),
-                               "oldest_date": self.oldest_date.strftime("%A, %d. %B %Y %I:%M%p"),
+                               "latest_broadcast_date":
+                               self.latest_broadcast_date.strftime(
+                                   "%A, %d. %B %Y %I:%M%p"),
+                               "creation_date":
+                               self.creation_date.strftime(
+                                   "%A, %d. %B %Y %I:%M%p"),
+                               "oldest_date":
+                               self.oldest_date.strftime(
+                                   "%A, %d. %B %Y %I:%M%p"),
                                "latest_btc_tx": self.latest_btc_tx,
                                "oldest_btc_tx": self.oldest_btc_tx,
                                "accesses": self.accesses,
@@ -110,14 +151,16 @@ class Collection(DecBase):
         return False
 
     def get_latest_version(self):
-        latest_version = self.version_list.order_by(CollectionVersion.collection_version.desc()).first() 
+        latest_version = self.version_list.order_by(
+            CollectionVersion.collection_version.desc()).first()
         if latest_version is None:
             return 0
         else:
             return latest_version.collection_version
 
     def get_latest_collection_version(self):
-        latest_version = self.version_list.order_by(CollectionVersion.collection_version.desc()).first() 
+        latest_version = self.version_list.order_by(
+            CollectionVersion.collection_version.desc()).first()
         return latest_version
 
     def update_keywords(self, new_keywords):
@@ -132,31 +175,3 @@ class Collection(DecBase):
                 new_key_list.append(new_keywords[i])
             i += 1
         self.keywords.extend(new_key_list)
-
-    def update_timestamp (self):
-        collection_version = get_latest_version()
-        if(collection_version == None):
-            print("Timestamp called on empty collection, CollectionVersion not in Cache")
-            return
-        
-        timestamp_obj = TimestampFile(collection_version.root_hash)
-        date_check = timestamp_obj.check_timestamp()
-        curr_time = date_check['time']
-        split_time = curr_time[0:4]+" "+curr_time[5:7]+" "+curr_time[8:10]+" "+curr_time[11:13]+" "+curr_time[14:16]+" "+curr_time[17:19]
-        cmp_curr_time = time.strptime(split_time, "%Y %m %d %H %M %S")
-        curr_txs= curr_time + ";" + date_check['Transaction']
-        if self.oldest_date == None:
-            self.oldest_date = cmp_curr_time
-            self.oldest_btc_tx = curr_txs
-            self.latest_btc_tx = curr_txs
-            return
-        split_time = self.latest_btc_tx.split(";")
-        latest_time = split_time[0]
-        latest_time_str = latest_time[0:4]+" "+latest_time[5:7]+" "+latest_time[8:10]+" "+latest_time[11:13]+" "+latest_time[14:16]+" "+latest_time[17:19]
-        cmp_latest = time.strptime(latest_time_str, "%Y %m %d %H %M %S")
-        if cmp_curr_time < self.oldest_date:
-            self.oldest_date = cmp_curr_time
-            self.oldest_btc_tx = curr_txs
-        if cmp_curr_time > cmp_latest:
-            self.latest_btc_tx = curr_txs
-

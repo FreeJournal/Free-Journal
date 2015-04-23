@@ -1,7 +1,7 @@
-from controllers.controller import Controller
-from bitmessage import Bitmessage
-from config import MAIN_CHANNEL_ADDRESS
-from cache.cache import Cache
+from .controllers.controller import Controller
+from .bitmessage import Bitmessage
+from .config import MAIN_CHANNEL_ADDRESS
+from .cache.cache import Cache
 from datetime import datetime
 
 
@@ -9,19 +9,20 @@ def rebroadcast(collection):
     """
     Rebroadcast the collection to the Main Channel
     :param collection: the collection object
-    :return:
+    :return: true if success, false if unsuccess
     """
 
-    #Connect to bitmessage and create a temporary address
+    # Connect to bitmessage and create a temporary address
     bitmessage = Bitmessage()
     from_address = bitmessage.create_address("Rebroadcast", random=True)
     collection.address = from_address
 
-    #Connect to controller and rebroadcast
+    # Connect to controller and rebroadcast
     controller = Controller()
     print("Rebroadcasting collection: " + collection.title)
 
-    success = controller.publish_collection(collection, MAIN_CHANNEL_ADDRESS, from_address)
+    success = controller.publish_collection(
+        collection, MAIN_CHANNEL_ADDRESS, from_address)
     if not success:
         return False
 

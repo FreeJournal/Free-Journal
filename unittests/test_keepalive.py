@@ -1,11 +1,12 @@
-from cache.cache import Cache
-from models.collection import Collection
-from bitmessage.bitmessage_keepalive import find_old_collections
+from .cache.cache import Cache
+from .models.collection import Collection
+from .bitmessage.bitmessage_keepalive import find_old_collections
 import datetime
 import unittest
 
 
 class TestKeepalive(unittest.TestCase):
+
     def setUp(self):
         cache = Cache()
         cache.reset_database()
@@ -36,7 +37,8 @@ class TestKeepalive(unittest.TestCase):
             description="description",
             keywords=[],
             documents=[],
-            latest_broadcast_date=datetime.datetime.today() - datetime.timedelta(days=3),
+            latest_broadcast_date=datetime.datetime.today() - datetime.timedelta(
+                days=3),
             creation_date=datetime.datetime.today(),
             oldest_date=datetime.datetime.today(),
             latest_btc_tx="",
@@ -55,7 +57,8 @@ class TestKeepalive(unittest.TestCase):
             description="description",
             keywords=[],
             documents=[],
-            latest_broadcast_date=datetime.datetime.today() - datetime.timedelta(days=1),
+            latest_broadcast_date=datetime.datetime.today() - datetime.timedelta(
+                days=1),
             creation_date=datetime.datetime.today(),
             oldest_date=datetime.datetime.today(),
             latest_btc_tx="",
@@ -74,7 +77,8 @@ class TestKeepalive(unittest.TestCase):
             address="bm-fourth",
             keywords=[],
             documents=[],
-            latest_broadcast_date=datetime.datetime.today() - datetime.timedelta(days=6),
+            latest_broadcast_date=datetime.datetime.today() - datetime.timedelta(
+                days=6),
             creation_date=datetime.datetime.today(),
             oldest_date=datetime.datetime.today(),
             latest_btc_tx="",

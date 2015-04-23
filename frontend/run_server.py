@@ -1,5 +1,5 @@
 from webapp import app, celery
-import config
+from . import config
 
 celery = celery  # Give `celery` variable to pass to celery
 
