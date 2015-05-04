@@ -12,12 +12,12 @@ def rebroadcast(collection, testing_mode=False):
     :return:
     """
 
-    #Connect to bitmessage and create a temporary address
+    # Connect to bitmessage and create a temporary address
     bitmessage = Bitmessage()
     from_address = bitmessage.create_address("Rebroadcast", random=True)
     collection.address = from_address
 
-    #Connect to controller and rebroadcast
+    # Connect to controller and rebroadcast
     controller = Controller()
     print("Rebroadcasting collection: " + collection.title)
 

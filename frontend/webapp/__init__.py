@@ -1,5 +1,6 @@
 from flask import Flask, render_template, send_from_directory, g, request
 from cache.cache import Cache
+
 from config import DOCUMENT_DIRECTORY_PATH, INDEX_LIMIT
 from os.path import expanduser
 

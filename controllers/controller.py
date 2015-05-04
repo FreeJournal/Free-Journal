@@ -34,7 +34,8 @@ class Controller:
         :param fj_message: the message containing the collection and signature
         :return: True if the signatures match, False otherwise
         """
-        h = hashlib.sha256(fj_message["pubkey"] + fj_message['payload']).hexdigest()
+        h = hashlib.sha256(
+            fj_message["pubkey"] + fj_message['payload']).hexdigest()
 
         if h == fj_message["signature"]:
             print "Signature Verified"
@@ -72,10 +73,10 @@ class Controller:
         :param hash: the Content Hash Key for a document
         :return: the file data if successful, None otherwise
         """
-        
+
         data = None
 
-        #Try obtaining a freenet connection
+        # Try obtaining a freenet connection
         try:
             freenet_connection = FreenetConnection()
         except Exception as e:
@@ -99,7 +100,8 @@ class Controller:
         """
 
         for document in documents:
-            #Create a new file name out of a hash to deal with possible naming conflicts
+            # Create a new file name out of a hash to deal with possible naming
+            # conflicts
             file_name = document.filename
             if not document.filename:
                 file_name = document.title + str(randint(0, 100))
@@ -135,7 +137,8 @@ class Controller:
                 print("Couldn't download " + file_name + " from freenet")
                 continue
 
-            # If the file data was successfully downloaded, save the data to disk
+            # If the file data was successfully downloaded, save the data to
+            # disk
             success = self._save_document(data, file_name)
             if success:
                 print("Successfully downloaded " + file_name + " from freenet")
@@ -162,9 +165,11 @@ class Controller:
             if db_doc is not None:
                 collection.documents.append(db_doc)
             else:
-                collection.documents.append(Document(collection_address=doc["address"], description=doc["description"],
-                                     hash=doc["hash"], title=doc["title"], filename=doc["filename"], accesses=doc["accesses"]))
-
+                collection.documents.append(
+                    Document(
+                        collection_address=doc[
+                            "address"], description=doc["description"],
+                        hash=doc["hash"], title=doc["title"], filename=doc["filename"], accesses=doc["accesses"]))
 
     def _cache_collection(self, payload, message):
         """
@@ -174,8 +179,9 @@ class Controller:
         :param payload: the contents of the FJ_message
         """
         # Grabbing the text representations of the documents and keywords and rebuilding them
-        #docs, keywords = self._build_docs_keywords(payload)
-        cached_collection = self.cache.get_collection_with_address(payload["address"])
+        # docs, keywords = self._build_docs_keywords(payload)
+        cached_collection = self.cache.get_collection_with_address(
+            payload["address"])
 
         if cached_collection is None:
             collection_model = Collection(
@@ -183,20 +189,26 @@ class Controller:
                 description=payload["description"],
                 address=payload["address"],
                 btc=payload["btc"],
-                creation_date=datetime.datetime.strptime(payload["creation_date"], "%A, %d. %B %Y %I:%M%p"),
-                oldest_date=datetime.datetime.strptime(payload["oldest_date"], "%A, %d. %B %Y %I:%M%p"),
-                latest_broadcast_date=datetime.datetime.strptime(payload["latest_broadcast_date"], "%A, %d. %B %Y %I:%M%p"),
+                creation_date=datetime.datetime.strptime(
+                    payload["creation_date"], "%A, %d. %B %Y %I:%M%p"),
+                oldest_date=datetime.datetime.strptime(
+                    payload["oldest_date"], "%A, %d. %B %Y %I:%M%p"),
+                latest_broadcast_date=datetime.datetime.strptime(
+                    payload["latest_broadcast_date"], "%A, %d. %B %Y %I:%M%p"),
                 votes=payload['votes'],
-                votes_last_checked=datetime.datetime.strptime(payload["votes_last_checked"], "%A, %d. %B %Y %I:%M%p"),
+                votes_last_checked=datetime.datetime.strptime(
+                    payload["votes_last_checked"], "%A, %d. %B %Y %I:%M%p"),
             )
 
             self._build_docs_keywords(payload, collection_model)
-            signature = Signature(pubkey=message["pubkey"], signature=message["signature"], address=payload["address"])
+            signature = Signature(
+                pubkey=message["pubkey"], signature=message["signature"], address=payload["address"])
             try:
                 self.cache.insert_new_collection(collection_model)
                 self.cache.insert_new_collection(signature)
                 self._hash_document_filenames(collection_model.documents, collection_model)
-                self.download_threads.add(self._download_documents(collection_model.title, collection_model.documents))
+                self.download_threads.add(self._download_documents(collection_model.title, 
+					collection_model.documents))
                 print "Cached New Collection"
                 return True
             except IntegrityError as m:
@@ -204,7 +216,8 @@ class Controller:
                 return False
         else:
             cached_collection.keywords = []
-            cached_sig = self.cache.get_signature_by_address(payload["address"])
+            cached_sig = self.cache.get_signature_by_address(
+                payload["address"])
             cached_sig.pubkey = message["pubkey"]
             cached_sig.signature = message["signature"]
             cached_collection.title = payload["title"]
@@ -212,19 +225,24 @@ class Controller:
             cached_collection.address = payload["address"]
             cached_collection.btc = payload["btc"]
             cached_collection.documents = []
-            cached_collection.creation_date = datetime.datetime.strptime(payload["creation_date"],
-                                                                         "%A, %d. %B %Y %I:%M%p")
-            cached_collection.oldest_date = datetime.datetime.strptime(payload["oldest_date"], "%A, %d. %B %Y %I:%M%p")
-            cached_collection.latest_broadcast_date = datetime.datetime.strptime(payload["latest_broadcast_date"],
-                                                                                 "%A, %d. %B %Y %I:%M%p")
+            cached_collection.creation_date = datetime.datetime.strptime(
+                payload["creation_date"],
+                "%A, %d. %B %Y %I:%M%p")
+            cached_collection.oldest_date = datetime.datetime.strptime(
+                payload["oldest_date"], "%A, %d. %B %Y %I:%M%p")
+            cached_collection.latest_broadcast_date = datetime.datetime.strptime(
+                payload["latest_broadcast_date"],
+                "%A, %d. %B %Y %I:%M%p")
             cached_collection.votes = payload['votes']
-            cached_collection.votes_last_checked = datetime.datetime.strptime(payload["votes_last_checked"], "%A, %d. %B %Y %I:%M%p")
+            cached_collection.votes_last_checked = datetime.datetime.strptime(
+                payload["votes_last_checked"], "%A, %d. %B %Y %I:%M%p")
             self._build_docs_keywords(payload, cached_collection)
             try:
                 self.cache.insert_new_collection(cached_collection)
                 self.cache.insert_new_collection(cached_sig)
                 self._hash_document_filenames(cached_collection.documents, cached_collection)
-                self.download_threads.add(self._download_documents(cached_collection.title, cached_collection.documents))
+                self.download_threads.add(self._download_documents(cached_collection.title, 
+					cached_collection.documents))
                 print "Cached Updated Collection"
                 return True
             except IntegrityError as m:
@@ -264,7 +282,7 @@ class Controller:
                     json_decode = json.loads(base64_decode)
                     validate(json_decode, fj_schema)
                 except (ValueError, TypeError, ValidationError) as m:
-                    #print m.message
+                    # print m.message
                     print "Not a FJ Message or Invalid FJ Message"
                     self.connection.delete_message(message['msgid'])
                     continue
@@ -286,7 +304,7 @@ class Controller:
                             self.connection.delete_message(message['msgid'])
                             return True
 
-        #print "Could not import collection"
+        # print "Could not import collection"
         return False
 
     def publish_collection(self, collection, to_address, from_address=None):
@@ -312,7 +330,8 @@ class Controller:
         sendable_fj_message = new_fj_message.to_json()
         if sendable_fj_message is None:
             return False
-        self.connection.send_message(to_address, from_address, "subject", sendable_fj_message)
+        self.connection.send_message(
+            to_address, from_address, "subject", sendable_fj_message)
         return True
 
     def rebroadcast(self, collection, to_address=MAIN_CHANNEL_ADDRESS, from_address=MAIN_CHANNEL_ADDRESS):
@@ -326,15 +345,20 @@ class Controller:
         collection_payload = collection.to_json()
         if collection_payload is None:
             return False
-        cached_signature = self.cache.get_signature_by_address(collection.address)
-        h = hashlib.sha256(cached_signature.pubkey + collection_payload).hexdigest()
+        cached_signature = self.cache.get_signature_by_address(
+            collection.address)
+        h = hashlib.sha256(
+            cached_signature.pubkey + collection_payload).hexdigest()
 
         if h == cached_signature.signature:
-            new_fj_message = FJMessage(3, collection.address, collection_payload)
-            sendable_fj_message = new_fj_message.to_json(cached_signature.signature)
+            new_fj_message = FJMessage(
+                3, collection.address, collection_payload)
+            sendable_fj_message = new_fj_message.to_json(
+                cached_signature.signature)
             if sendable_fj_message is None:
                 return False
-            self.connection.send_message(to_address, from_address, "subject", sendable_fj_message)
+            self.connection.send_message(
+                to_address, from_address, "subject", sendable_fj_message)
             return True
         else:
             print "Signature Not Verified"

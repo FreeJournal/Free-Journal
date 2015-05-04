@@ -5,10 +5,12 @@ from controllers import collections
 import unittest
 import datetime
 
+
 class TestCollectionHistory(unittest.TestCase):
+
     def setUp(self):
-    	self.cache = Cache()
-    	self.cache.reset_database()
+        self.cache = Cache()
+        self.cache.reset_database()
         self.collection1 = Collection(
             title="First Cdollection",
             btc="btc",
@@ -29,70 +31,76 @@ class TestCollectionHistory(unittest.TestCase):
 
     def test_two_doc_insert(self):
         d = Document(
-                    description="Test document A",
-                    hash="asdfasdfa;sldkfja;sldkfja;dljkfa;ldf",
-                    collection_address="bm-first",
-                    title="Test A",
+            description="Test document A",
+            hash="asdfasdfa;sldkfja;sldkfja;dljkfa;ldf",
+            collection_address="bm-first",
+            title="Test A",
         )
         d2 = Document(
-                    description="Test document B",
-                    hash="fdasdfsdfsdfsdfsdfsdfsdfdfsdfsddfdfdf",
-                    collection_address="bm-first",
-                    title="Test B",
+            description="Test document B",
+            hash="fdasdfsdfsdfsdfsdfsdfsdfdfsdfsddfdfdf",
+            collection_address="bm-first",
+            title="Test B",
         )
         self.cache.insert_new_document(d)
         collections.update_hash(self.collection1)
         self.cache.insert_new_document(d2)
         collections.update_hash(self.collection1)
-        versions = self.cache.get_versions_for_collection(self.collection1.address)
-        if(len(versions)<2):
+        versions = self.cache.get_versions_for_collection(
+            self.collection1.address)
+        if(len(versions) < 2):
             print(len(versions))
             self.fail("No new version was created")
-        self.assertTrue(len(versions)==2)
+        self.assertTrue(len(versions) == 2)
 
     def test_empty_version(self):
         print("test")
-    	versions = self.cache.get_versions_for_collection(self.collection1.address)
-    	if(len(versions)!=0):
-    		self.fail("Version should be empty to start")
+        versions = self.cache.get_versions_for_collection(
+            self.collection1.address)
+        if(len(versions) != 0):
+            self.fail("Version should be empty to start")
 
     def test_increment_collectionversion(self):
-        versions = self.cache.get_versions_for_collection(self.collection1.address)
-        if(len(versions)!=0):
+        versions = self.cache.get_versions_for_collection(
+            self.collection1.address)
+        if(len(versions) != 0):
             self.fail("Version should be nonzero")
         collections.update_hash(self.collection1)
-        versions = self.cache.get_versions_for_collection(self.collection1.address)
-        if(versions[0].collection_version!=1):
+        versions = self.cache.get_versions_for_collection(
+            self.collection1.address)
+        if(versions[0].collection_version != 1):
             self.fail("Incorrect collection version")
 
     def test_version_update(self):
-    	collections.update_hash(self.collection1)
-    	versions = self.cache.get_versions_for_collection(self.collection1.address)
-    	if(len(versions)!=1):
-    		self.fail("Version should be updated")
-    	if(versions[0].collection_address!=self.collection1.address):
-    		print(versions[0].collection_address)
-    		print(self.collection1.address)
-    		self.fail("Wrong collection address")
+        collections.update_hash(self.collection1)
+        versions = self.cache.get_versions_for_collection(
+            self.collection1.address)
+        if(len(versions) != 1):
+            self.fail("Version should be updated")
+        if(versions[0].collection_address != self.collection1.address):
+            print(versions[0].collection_address)
+            print(self.collection1.address)
+            self.fail("Wrong collection address")
 
     def test_different_root_hash(self):
         d = Document(
-                    description="Test document A",
-                    hash="asdfasdfa;sldkfja;sldkfja;dljkfa;ldf",
-                    collection_address="bm-first",
-                    title="Test A",
+            description="Test document A",
+            hash="asdfasdfa;sldkfja;sldkfja;dljkfa;ldf",
+            collection_address="bm-first",
+            title="Test A",
         )
         d2 = Document(
-                    description="Test document B",
-                    hash="fdasdfsdfsdfsdfsdfsdfsdfdfsdfsddfdfdf",
-                    collection_address="bm-first",
-                    title="Test B",
+            description="Test document B",
+            hash="fdasdfsdfsdfsdfsdfsdfsdfdfsdfsddfdfdf",
+            collection_address="bm-first",
+            title="Test B",
         )
         self.cache.insert_new_document(d)
         collections.update_hash(self.collection1)
         self.cache.insert_new_document(d2)
         collections.update_hash(self.collection1)
-        versions = self.cache.get_versions_for_collection(self.collection1.address)
+        versions = self.cache.get_versions_for_collection(
+            self.collection1.address)
         self.assertTrue(versions[0].root_hash != versions[1].root_hash)
 
 if __name__ == '__main__':

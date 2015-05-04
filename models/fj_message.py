@@ -66,9 +66,10 @@ class FJMessage():
         if signature is None:
             print "Could not find address in keys.dat"
             return None
-        json_representation = {"protocol": self.protocol, "type_id": self.type_id, "original_sender": self.original_sender,
-                               "signature": signature, "time_created": self.time_created.strftime("%A, %d. %B %Y %I:%M%p"),
-                               "payload": self.payload, "pubkey": self.pubkey}
+        json_representation = {
+            "protocol": self.protocol, "type_id": self.type_id, "original_sender": self.original_sender,
+            "signature": signature, "time_created": self.time_created.strftime("%A, %d. %B %Y %I:%M%p"),
+            "payload": self.payload, "pubkey": self.pubkey}
         try:
             validate(json_representation, fj_schema)
             return json.dumps(json_representation, sort_keys=True)

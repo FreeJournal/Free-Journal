@@ -18,17 +18,21 @@ except AttributeError:
 
 try:
     _encoding = QtGui.QApplication.UnicodeUTF8
+
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
+
 class Ui_Form(object):
+
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
         Form.resize(300, 200)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        sizePolicy = QtGui.QSizePolicy(
+            QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
@@ -43,7 +47,8 @@ class Ui_Form(object):
         self.label.setMinimumSize(QtCore.QSize(244, 75))
         self.label.setMaximumSize(QtCore.QSize(244, 75))
         self.label.setText(_fromUtf8(""))
-        self.label.setPixmap(QtGui.QPixmap(os.getcwd() + '/frontend/uploader/FJ_Desktop_UI/FreeJournal_logo_small.jpg'))
+        self.label.setPixmap(
+            QtGui.QPixmap(os.getcwd() + '/frontend/uploader/FJ_Desktop_UI/FreeJournal_logo_small.jpg'))
         self.label.setScaledContents(True)
         self.label.setWordWrap(False)
         self.label.setOpenExternalLinks(False)

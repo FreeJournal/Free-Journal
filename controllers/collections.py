@@ -5,7 +5,8 @@ from cache.cache import DBSession, Cache
 import time
 import datetime
 
-def get_oldest (collection):
+
+def get_oldest(collection):
     """
     Used to get the latest timestamp time from collection
     :param collection:
@@ -17,7 +18,8 @@ def get_oldest (collection):
     else:
 	return time.mktime(collection.oldest_date.timetuple())
 
-def get_latest (collection):
+
+def get_latest(collection):
     """
     Used to get the latest timestamp time from collection
     :param collection:
@@ -28,9 +30,10 @@ def get_latest (collection):
         return time.strptime(time_str, "%Y-%m-%d %H:%M:%S")
     else:
         get_time = collection.latest_btc_tx.split(";")
-        return time.strptime(get_time[0] , "%Y-%m-%d %H:%M:%S")
+        return time.strptime(get_time[0], "%Y-%m-%d %H:%M:%S")
 
-def edit_time (collection, curr, curr_txs):
+
+def edit_time(collection, curr, curr_txs):
     """
     Used to edit collection oldest_date, oldest_btc_tx, latest_btc_tx
     :param collection:
@@ -41,8 +44,8 @@ def edit_time (collection, curr, curr_txs):
     latest = get_latest(collection)
 
     if curr < oldest:
-      collection.oldest_date = curr
-      collection.oldest_btc_tx = curr_txs
+        collection.oldest_date = curr
+        collection.oldest_btc_tx = curr_txs
     if curr > latest:
       collection.latest_btc_tx = curr_txs
     if collection.latest_btc_tx is None:
@@ -59,12 +62,11 @@ def update_timestamp_version (collection, collection_version):
     :param collection:
     """
     if(collection_version == None):
-        print("Timestamp called on empty collection, CollectionVersion not in Cache")
+        print(
+            "Timestamp called on empty collection, CollectionVersion not in Cache")
         return
 
     timestamp = TimestampFile(collection_version.root_hash).check_timestamp()
-   
-    print timestamp['time']
 
     curr_time=time.strptime(timestamp['time'], "%Y-%m-%d %H:%M:%S")
 
@@ -75,23 +77,26 @@ def update_timestamp_version (collection, collection_version):
 def update_hash(collection):
     string = ""
     if collection is None:
-      return None
-    #check whether the version hashed already collection.version
+        return None
+    # check whether the version hashed already collection.version
     cache = Cache()
     for document in collection.documents:
-        string+=document.hash+"|"
-        if len(string) ==0:
+        string += document.hash + "|"
+        if len(string) == 0:
             return None
     string = string[:-1]
     h = hashlib.sha256()
     h.update(string)
     root_hash = h.hexdigest()
     session = DBSession.object_session(collection)
-    collection_hash = session.query(CollectionVersion).filter_by(root_hash=root_hash).first()
+    collection_hash = session.query(
+        CollectionVersion).filter_by(root_hash=root_hash).first()
     if collection_hash is not None:
         return
-    collection_hash = CollectionVersion(root_hash=root_hash, document_ids = string, collection_version = collection.get_latest_version()+1,
-                        collection_address = collection.address)
+    collection_hash = CollectionVersion(
+        root_hash=root_hash, document_ids=string, collection_version=collection.get_latest_version(
+        ) + 1,
+        collection_address=collection.address)
     session.add(collection_hash)
     collection.version_list.append(collection_hash)
     session.commit()

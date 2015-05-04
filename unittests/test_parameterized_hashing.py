@@ -1,4 +1,5 @@
-import unittest, datetime
+import unittest
+import datetime
 from cache.cache import Cache
 from models.collection import Collection
 from models.document import Document
@@ -11,29 +12,30 @@ from sqlalchemy.exc import StatementError
 
 our_cache = Cache()
 
+
 def add_collection():
     global our_cache
     coll_address = str(uuid.uuid1())
     doc_hash_1 = str(uuid.uuid1())
     doc_hash_2 = str(uuid.uuid1())
     coll = Collection(
-            title="Test",
-            description="This is a collection!",
-            address=str(uuid.uuid1()),
-            btc=str(uuid.uuid1()),
-            keywords=[
-            ],
-            documents=[
-                Document(
-                    collection_address=doc_hash_1,
-                    description="Test document A",
-                    hash=str(uuid.uuid1()),
-                    title="Test A",
-                    ),
-            ],
-            creation_date=datetime.datetime.now(),
-            oldest_date=datetime.datetime.now(),
-            latest_broadcast_date=datetime.datetime.now()
+        title="Test",
+        description="This is a collection!",
+        address=str(uuid.uuid1()),
+        btc=str(uuid.uuid1()),
+        keywords=[
+        ],
+        documents=[
+            Document(
+                collection_address=doc_hash_1,
+                description="Test document A",
+                hash=str(uuid.uuid1()),
+                title="Test A",
+            ),
+        ],
+        creation_date=datetime.datetime.now(),
+        oldest_date=datetime.datetime.now(),
+        latest_broadcast_date=datetime.datetime.now()
     )
     our_cache.insert_new_collection(coll)
     collections.update_hash(coll)
@@ -43,10 +45,13 @@ def add_collection():
 param_arr = []
 for i in range(0, 5):
     collection = add_collection()
-    param_arr.append([ "update_hash_%d" % (i), collection, str(collection.get_latest_collection_version().root_hash)])
+    param_arr.append(
+        ["update_hash_%d" % (i), collection, str(collection.get_latest_collection_version().root_hash)])
+
 
 class TestSequense(unittest.TestCase):
     pass
+
 
 def test_generator(test_coll, prev_value):
     def test(self):
@@ -66,7 +71,7 @@ def test_generator(test_coll, prev_value):
                 return True
         collections.update_hash(test_coll)
         curr_value = test_coll.get_latest_collection_version().root_hash
-        self.assertNotEqual(str(curr_value),prev_value)
+        self.assertNotEqual(str(curr_value), prev_value)
     return test
 
 for each_param in param_arr:
@@ -75,4 +80,3 @@ for each_param in param_arr:
     setattr(TestSequense, test_name, test)
     suite = unittest.TestLoader().loadTestsFromTestCase(TestSequense)
     unittest.TextTestRunner(verbosity=2).run(suite)
-

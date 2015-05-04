@@ -41,6 +41,7 @@ def create_test_collection(address):
 
 
 class TestCache(unittest.TestCase):
+
     def setUp(self):
         self.cache = Cache()
 
@@ -51,7 +52,8 @@ class TestCache(unittest.TestCase):
         coll_address = str(uuid.uuid1())
         coll = create_test_collection(coll_address)
         self.cache.session.add(coll)
-        coll = self.cache.session.query(Collection).filter(Collection.address == coll_address).one()
+        coll = self.cache.session.query(Collection).filter(
+            Collection.address == coll_address).one()
         self.assertEquals(coll.title, "Test")
         doc = self.cache.session.query(Document).filter(Document.hash == coll.documents[1].hash).one()
         self.assertEquals(doc.title, "Test B")
@@ -69,7 +71,6 @@ class TestCache(unittest.TestCase):
         colls = self.cache.get_collections_paginated(5, 5)
         self.assertEquals(colls.count(), 5)
         self.assertEquals(colls[0].address, addrs[14])
-
 
 suite = unittest.TestLoader().loadTestsFromTestCase(TestCache)
 unittest.TextTestRunner(verbosity=2).run(suite)

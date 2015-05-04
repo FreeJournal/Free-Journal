@@ -36,7 +36,7 @@ class TestControllerEvil(unittest.TestCase):
                     accesses=0,
                     filename="joe.txt",
                     collection_address="BM-2cSrapXpgDTFD8AyDmU1BGifNkB2Z6X9k8"
-                    ),
+                ),
                 Document(
                     description="Test document B",
                     hash='gdssgsdg',
@@ -44,7 +44,7 @@ class TestControllerEvil(unittest.TestCase):
                     accesses=3,
                     filename="gile.txt",
                     collection_address="BM-2cSrapXpgDTFD8AyDmU1BGifNkB2Z6X9k8"
-                    ),
+                ),
                 Document(
                     description="Test document Bddd",
                     hash='afff',
@@ -52,7 +52,7 @@ class TestControllerEvil(unittest.TestCase):
                     accesses=3,
                     filename="gile.txt",
                     collection_address="BM-2cSrapXpgDTFD8AyDmU1BGifNkB2Z6X9k8"
-                    ),
+                ),
             ],
             creation_date=datetime.datetime.now(),
             oldest_date=datetime.datetime.now(),
@@ -69,11 +69,13 @@ class TestControllerEvil(unittest.TestCase):
 
     def test_bad_signature(self):
 
-        result = self.controller._check_signature({'payload': 'afgga', 'signature': 'fake', 'pubkey': 'sff'})
+        result = self.controller._check_signature(
+            {'payload': 'afgga', 'signature': 'fake', 'pubkey': 'sff'})
         self.assertFalse(result)
 
     def test_address_not_in_keys(self):
-        result = self.controller.publish_collection(self.test_collection_evil, self.address)
+        result = self.controller.publish_collection(
+            self.test_collection_evil, self.address)
         self.assertFalse(result)
 
 suite = unittest.TestLoader().loadTestsFromTestCase(TestControllerEvil)

@@ -32,12 +32,12 @@ class TestBitcoinIntegration(unittest.TestCase):
                     description="Test document A",
                     hash=doc_hash_1,
                     title="Test A",
-                    ),
+                ),
                 Document(
                     description="Test document B",
                     hash=doc_hash_2,
                     title="Test B",
-                    ),
+                ),
             ],
             creation_date=datetime.datetime.now(),
             oldest_date=datetime.datetime.now(),
@@ -68,7 +68,5 @@ class TestBitcoinIntegration(unittest.TestCase):
         self.assertEqual(collection.oldest_btc_tx, "2015-03-01 06:42:08;2be396b3c08c71c04e750142eda9216f52cdd4277345a239ec736fe2540f5e53")
         self.assertEqual(collection.latest_btc_tx, "2015-03-01 06:42:08;2be396b3c08c71c04e750142eda9216f52cdd4277345a239ec736fe2540f5e53")
 
-
 suite = unittest.TestLoader().loadTestsFromTestCase(TestBitcoinIntegration)
 unittest.TextTestRunner(verbosity=2).run(suite)
-

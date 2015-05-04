@@ -3,6 +3,7 @@ from models import DecBase
 
 
 class Keyword(DecBase):
+
     """ A keyword, used for search (one class per unique keyword)
 
         Attributes:
@@ -13,4 +14,3 @@ class Keyword(DecBase):
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     name = Column(String(50), nullable=False, unique=True)
-

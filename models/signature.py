@@ -3,6 +3,7 @@ from models import DecBase
 
 
 class Signature(DecBase):
+
     """ A signature validates the contents of a collection.
 
         Attributes:

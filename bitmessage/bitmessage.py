@@ -8,6 +8,7 @@ import json
 
 
 class Bitmessage():
+
     def __init__(self):
         self.os = sys.platform
 
@@ -15,7 +16,8 @@ class Bitmessage():
         self.subscribe(MAIN_CHANNEL_ADDRESS, "FreeJournal Main Channel")
 
     def __startup(self):
-        #Try connecting via the api first to see if PyBitmessage is already running
+        # Try connecting via the api first to see if PyBitmessage is already
+        # running
         try:
             self._api_connect()
             assert(5 == self.api.add(2, 3))
@@ -23,7 +25,7 @@ class Bitmessage():
             self._launch_bitmessage()
             self._api_connect()
 
-        #Wait for api to connect to the bitmessage client
+        # Wait for api to connect to the bitmessage client
         connected = False
         while not connected:
             try:
@@ -50,7 +52,8 @@ class Bitmessage():
             devnull = open(os.devnull, 'wb')
 
             # Start up PyBitmessage
-            subprocess.Popen([RUN_PYBITMESSAGE_LINUX], shell=True, stdout=devnull, stderr=devnull)
+            subprocess.Popen(
+                [RUN_PYBITMESSAGE_LINUX], shell=True, stdout=devnull, stderr=devnull)
 
     def subscribe(self, address, label=None):
         """Subscribes to an address and gives it an optional label
@@ -58,16 +61,16 @@ class Bitmessage():
         :param label: (optional) text to associate with address
         :return boolean noting success of adding the subscription
         """
-        #Retrieve a list of current subscriptions
+        # Retrieve a list of current subscriptions
         subs = self.api.listSubscriptions()
 
-        #Ensure user isn't already subscribed to the address
+        # Ensure user isn't already subscribed to the address
         sub_dict = json.loads(subs)
         for sub in sub_dict["subscriptions"]:
             if sub['address'] == address:
                 return False
 
-        #Create subscription
+        # Create subscription
         if label:
             encoded_label = base64.b64encode(label)
             self.api.addSubscription(address, encoded_label)
@@ -107,7 +110,8 @@ class Bitmessage():
             return self.api.createRandomAddress(encoded_password)
         else:
             my_addresses = self.get_addresses()
-            target_address = self.api.getDeterministicAddress(encoded_password, 3, 1)
+            target_address = self.api.getDeterministicAddress(
+                encoded_password, 3, 1)
             for address in my_addresses['addresses']:
                 if address['address'] == target_address:
                     return target_address
@@ -137,7 +141,8 @@ class Bitmessage():
 
         encoded_subject = base64.b64encode(subject)
         encoded_message = base64.b64encode(message)
-        ack_data = self.api.sendMessage(to_address, from_address, encoded_subject, encoded_message)
+        ack_data = self.api.sendMessage(
+            to_address, from_address, encoded_subject, encoded_message)
 
         print('Sending Message...')
 
@@ -153,7 +158,8 @@ class Bitmessage():
         encoded_subject = base64.b64encode(subject)
         encoded_message = base64.b64encode(message)
 
-        ack_data = self.api.sendBroadcast(from_address, encoded_subject, encoded_message)
+        ack_data = self.api.sendBroadcast(
+            from_address, encoded_subject, encoded_message)
 
         print('Sending Broadcast...')
 

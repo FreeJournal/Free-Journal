@@ -18,20 +18,24 @@ except AttributeError:
 
 try:
     _encoding = QtGui.QApplication.UnicodeUTF8
+
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
+
 class Ui_DialogNewCollection(object):
+
     def setupUi(self, DialogNewCollection):
         DialogNewCollection.setObjectName(_fromUtf8("DialogNewCollection"))
         DialogNewCollection.resize(475, 500)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(DialogNewCollection.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            DialogNewCollection.sizePolicy().hasHeightForWidth())
         DialogNewCollection.setSizePolicy(sizePolicy)
         DialogNewCollection.setMinimumSize(QtCore.QSize(475, 500))
         icon = QtGui.QIcon(os.getcwd() + '/frontend/uploader/FJ_Desktop_UI/FreeJournal_icon.jpg')
@@ -51,10 +55,12 @@ class Ui_DialogNewCollection(object):
         self.verticalLayout = QtGui.QVBoxLayout()
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.labelCollectionName = QtGui.QLabel(DialogNewCollection)
-        self.labelCollectionName.setObjectName(_fromUtf8("labelCollectionName"))
+        self.labelCollectionName.setObjectName(
+            _fromUtf8("labelCollectionName"))
         self.verticalLayout.addWidget(self.labelCollectionName)
         self.lineEditCollectionName = QtGui.QLineEdit(DialogNewCollection)
-        self.lineEditCollectionName.setObjectName(_fromUtf8("lineEditCollectionName"))
+        self.lineEditCollectionName.setObjectName(
+            _fromUtf8("lineEditCollectionName"))
         self.verticalLayout.addWidget(self.lineEditCollectionName)
         self.line_3 = QtGui.QFrame(DialogNewCollection)
         self.line_3.setFrameShape(QtGui.QFrame.HLine)
@@ -78,8 +84,10 @@ class Ui_DialogNewCollection(object):
         self.label_2 = QtGui.QLabel(DialogNewCollection)
         self.label_2.setObjectName(_fromUtf8("label_2"))
         self.verticalLayout_2.addWidget(self.label_2)
-        self.plainTextEditDescription = QtGui.QPlainTextEdit(DialogNewCollection)
-        self.plainTextEditDescription.setObjectName(_fromUtf8("plainTextEditDescription"))
+        self.plainTextEditDescription = QtGui.QPlainTextEdit(
+            DialogNewCollection)
+        self.plainTextEditDescription.setObjectName(
+            _fromUtf8("plainTextEditDescription"))
         self.verticalLayout_2.addWidget(self.plainTextEditDescription)
         self.line_4 = QtGui.QFrame(DialogNewCollection)
         self.line_4.setFrameShape(QtGui.QFrame.HLine)
@@ -89,8 +97,10 @@ class Ui_DialogNewCollection(object):
         self.labelAddKeywords = QtGui.QLabel(DialogNewCollection)
         self.labelAddKeywords.setObjectName(_fromUtf8("labelAddKeywords"))
         self.verticalLayout_2.addWidget(self.labelAddKeywords)
-        self.plainTextEditAddKeywords = QtGui.QPlainTextEdit(DialogNewCollection)
-        self.plainTextEditAddKeywords.setObjectName(_fromUtf8("plainTextEditAddKeywords"))
+        self.plainTextEditAddKeywords = QtGui.QPlainTextEdit(
+            DialogNewCollection)
+        self.plainTextEditAddKeywords.setObjectName(
+            _fromUtf8("plainTextEditAddKeywords"))
         self.verticalLayout_2.addWidget(self.plainTextEditAddKeywords)
         self.line = QtGui.QFrame(DialogNewCollection)
         self.line.setFrameShape(QtGui.QFrame.HLine)
@@ -100,13 +110,16 @@ class Ui_DialogNewCollection(object):
         self.verticalLayout_4.addLayout(self.verticalLayout_2)
         self.buttonBoxConfirm = QtGui.QDialogButtonBox(DialogNewCollection)
         self.buttonBoxConfirm.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBoxConfirm.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
+        self.buttonBoxConfirm.setStandardButtons(
+            QtGui.QDialogButtonBox.Cancel | QtGui.QDialogButtonBox.Ok)
         self.buttonBoxConfirm.setObjectName(_fromUtf8("buttonBoxConfirm"))
         self.verticalLayout_4.addWidget(self.buttonBoxConfirm)
 
         self.retranslateUi(DialogNewCollection)
-        QtCore.QObject.connect(self.buttonBoxConfirm, QtCore.SIGNAL(_fromUtf8("accepted()")), DialogNewCollection.accept)
-        QtCore.QObject.connect(self.buttonBoxConfirm, QtCore.SIGNAL(_fromUtf8("rejected()")), DialogNewCollection.reject)
+        QtCore.QObject.connect(self.buttonBoxConfirm, QtCore.SIGNAL(
+            _fromUtf8("accepted()")), DialogNewCollection.accept)
+        QtCore.QObject.connect(self.buttonBoxConfirm, QtCore.SIGNAL(
+            _fromUtf8("rejected()")), DialogNewCollection.reject)
         QtCore.QMetaObject.connectSlotsByName(DialogNewCollection)
 
     def retranslateUi(self, DialogNewCollection):

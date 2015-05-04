@@ -5,11 +5,13 @@ import time
 
 
 class TestBitmessage(unittest.TestCase):
+
     def setUp(self):
         try:
             self.bitmessage = Bitmessage()
         except:
-            self.fail("An exception was raised establishing a Bitmessage connection")
+            self.fail(
+                "An exception was raised establishing a Bitmessage connection")
 
     def tearDown(self):
         self.bitmessage = None
@@ -37,7 +39,8 @@ class TestBitmessage(unittest.TestCase):
     def test_broadcast(self):
         message = "Hello World"
         subject = "Test Broadcast"
-        address = self.bitmessage.create_address("Unit Test: Broadcast", random=True)
+        address = self.bitmessage.create_address(
+            "Unit Test: Broadcast", random=True)
 
         ack_data = self.bitmessage.send_broadcast(address, subject, message)
 

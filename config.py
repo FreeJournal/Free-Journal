@@ -2,7 +2,7 @@
     By default, the Postgres database is used and required.
     Feel free to change this to any of the commented, alternate
     URL's to change database management systems.
-''' 
+'''
 # DB_URL = 'postgres://postgres:password@localhost/freejournal'
 # DB_URL = 'mysql://scott:tiger@localhost/foo'
 DB_URL = 'sqlite:///fj.db'
@@ -34,7 +34,7 @@ DOCUMENT_DIRECTORY_PATH = "~/Documents/"
 ''' Webapp settings'''
 # Set to true at your own risk
 WEBAPP_DEBUG = True
-WEBAPP_PORT  = 5000
+WEBAPP_PORT = 5000
 INDEX_LIMIT = 10
 
 ''' Listener settings'''

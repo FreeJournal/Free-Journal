@@ -14,7 +14,8 @@ class TestRebroadcast(unittest.TestCase):
 
     def setUp(self):
         self.controller = Controller()
-        self.address = self.controller.connection.create_address('Controller Test address', True)
+        self.address = self.controller.connection.create_address(
+            'Controller Test address', True)
 
         coll_address = str(uuid.uuid1())
         doc_hash_1 = str(uuid.uuid1())
@@ -38,7 +39,7 @@ class TestRebroadcast(unittest.TestCase):
                     accesses=0,
                     filename="joe.txt",
                     collection_address="afgagahhsgh"
-                    ),
+                ),
                 Document(
                     description="Test document B",
                     hash=doc_hash_2,
@@ -46,7 +47,7 @@ class TestRebroadcast(unittest.TestCase):
                     accesses=3,
                     filename="gile.txt",
                     collection_address="afgagasghhhss"
-                    ),
+                ),
             ],
             creation_date=datetime.datetime.now(),
             oldest_date=datetime.datetime.now(),
@@ -57,15 +58,16 @@ class TestRebroadcast(unittest.TestCase):
             votes=3,
             votes_last_checked=datetime.datetime.now()
         )
-        self.test_signature = Signature(pubkey='itsakey',address=self.address)
+        self.test_signature = Signature(pubkey='itsakey', address=self.address)
 
     def tearDown(self):
         self.controller = None
 
     def test_rebroadcast(self):
         self.controller.cache.insert_new_collection(self.test_collection)
-        self.test_signature.signature = hashlib.sha256(self.test_signature.pubkey + self.test_collection.to_json()).hexdigest()
+        self.test_signature.signature = hashlib.sha256(
+            self.test_signature.pubkey + self.test_collection.to_json()).hexdigest()
         self.controller.cache.insert_new_collection(self.test_signature)
-        result = self.controller.rebroadcast(self.test_collection, self.address, self.address)
+        result = self.controller.rebroadcast(
+            self.test_collection, self.address, self.address)
         self.assertEqual(True, result)
-

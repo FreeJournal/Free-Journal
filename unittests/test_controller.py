@@ -14,7 +14,8 @@ class TestController(unittest.TestCase):
 
     def setUp(self):
         self.controller = Controller()
-        self.address = self.controller.connection.create_address('Controller Test address', True)
+        self.address = self.controller.connection.create_address(
+            'Controller Test address', True)
 
         coll_address = str(uuid.uuid1())
         doc_hash_1 = str(uuid.uuid1())
@@ -37,7 +38,7 @@ class TestController(unittest.TestCase):
                     accesses=0,
                     filename="joe.txt",
                     collection_address="afgagahhsgh"
-                    ),
+                ),
                 Document(
                     description="Test document B",
                     hash=doc_hash_2,
@@ -45,7 +46,7 @@ class TestController(unittest.TestCase):
                     accesses=3,
                     filename="gile.txt",
                     collection_address="afgagasghhhss"
-                    ),
+                ),
             ],
             creation_date=datetime.datetime.now(),
             oldest_date=datetime.datetime.now(),
@@ -75,7 +76,7 @@ class TestController(unittest.TestCase):
                     accesses=0,
                     filename="joe.txt",
                     collection_address="afgagahhsgh"
-                    ),
+                ),
                 Document(
                     description="Test document B",
                     hash=doc_hash_2,
@@ -83,15 +84,15 @@ class TestController(unittest.TestCase):
                     accesses=3,
                     filename="gile.txt",
                     collection_address="afgagasghhhss"
-                    ),
-                 Document(
+                ),
+                Document(
                     description="Test document B",
                     hash=doc_hash_3,
                     title="Test C",
                     accesses=5,
                     filename="gileww.txt",
                     collection_address="afgagawwwsghhhss"
-                    ),
+                ),
             ],
             creation_date=datetime.datetime.now(),
             oldest_date=datetime.datetime.now(),
@@ -107,7 +108,8 @@ class TestController(unittest.TestCase):
         self.controller = None
 
     def test_publish_and_import_collection(self):
-        self.controller.publish_collection(self.test_collection, self.address, self.address)
+        self.controller.publish_collection(
+            self.test_collection, self.address, self.address)
         timeout = 600  # 10 minutes
         start_time = time.time()
         curr_time = time.time()
@@ -124,7 +126,8 @@ class TestController(unittest.TestCase):
         self.assertEqual(coll.btc, '123456789')
         self.assertEqual(coll.description, 'This is a collection!')
         self.assertEqual(coll.address, self.address)
-        self.controller.publish_collection(self.test_collection_updated, self.address, self.address)
+        self.controller.publish_collection(
+            self.test_collection_updated, self.address, self.address)
 
         timeout = 600  # 10 minutes
         start_time = time.time()
@@ -140,7 +143,8 @@ class TestController(unittest.TestCase):
         coll = self.controller.cache.get_collection_with_address(self.address)
         self.assertEqual(coll.title, 'Test')
         self.assertEqual(coll.btc, '123456789')
-        self.assertEqual(coll.description, 'This is a collection! and its updated')
+        self.assertEqual(
+            coll.description, 'This is a collection! and its updated')
         self.assertEqual(coll.address, self.address)
         self.assertEqual(3, len(coll.documents))
         self.assertEqual(3, len(coll.keywords))

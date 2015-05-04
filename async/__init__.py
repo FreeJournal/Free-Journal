@@ -23,6 +23,7 @@ def repeat_periodic(interval):
     def decorator(func):
         def wrapper(*args, **kwargs):
             stop_event = Event()
+
             @run_as_thread
             def loop():
                 while not stop_event.wait(interval):
