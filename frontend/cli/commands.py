@@ -62,8 +62,7 @@ def print_help():
     print ("\tlisten")
     print ("\tinstall [freenet|bitmessage|all]")
     print ("\tshowcollection [index bitmessage ID]")
-    print ("\tputcollection [address password] [title] [description] [keywords] " \
-            + "[Bitcoin address (for rating)]")
+    print ("\tputcollection [address password] [title] [description] [keywords] ")
     print ("\tpublishcollection [address password] [index bitmessage ID]")
     print ("\twebapp")
     print ("\tuploader")
@@ -143,7 +142,7 @@ def list_collection_version(collection_address, document_ids):
         print("Collection Versions for " + collection_address + ":" )
         print ("\t" + "Root hash" + "\t\t\t\t\t\t\t\t" + "Collection Version")
     else:
-        print("Collection not found")
+        print("Collection is empty")
     for version in versions:
         print("\t" + version.root_hash + "\t" + str(version.collection_version))
         if(document_ids == 'documents'):
@@ -198,10 +197,8 @@ def put_document(file_path, collection_address, title, description):
     cache.insert_new_document(document)
     collection = cache.get_collection_with_address(collection_address)
     collections.update_hash(collection)
-    print ("Inserted " + file_path + " successfully with URI " + uri)
-    print ("Allow up to 10 minutes for file to propogate on the freenet network")
 
-def put_collection(address_password, title, description, keywords, btc):
+def put_collection(address_password, title, description, keywords):
     """ Create a collection in local cache
         :param address_password: The password with which to protect the collection.
         Should be at least 20 characters for optimal security and unique.  Generates 
@@ -229,7 +226,7 @@ def put_collection(address_password, title, description, keywords, btc):
         address=address,
         accesses=0,
         votes=0,
-        btc=btc,
+        btc="btc",
         keywords=keywords,
         documents=[],
         creation_date=datetime.datetime.now(),
@@ -309,10 +306,10 @@ def process_command(command):
         if (validate_cli_arguments(3)):
             install_dependencies(sys.argv[2])
     elif command == 'putcollection':
-        if (validate_cli_arguments(7)):
+        if (validate_cli_arguments(6)):
             put_collection(sys.argv[2], \
                 sys.argv[3], sys.argv[4], \
-                sys.argv[5], sys.argv[6])
+                sys.argv[5])
     elif command == 'publishcollection':
         if (validate_cli_arguments(4)):
             publish_collection(sys.argv[2], sys.argv[3])

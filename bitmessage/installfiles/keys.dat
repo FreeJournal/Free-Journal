@@ -43,11 +43,11 @@ apiusername = username
 apipassword = password
 daemon = true
 
-[BM-2cXExRht8eiB7anRv8Rc3TvSTm4GcJ2Txx]
+[BM-2cUtm3XCJ9tpa3TTVLuoiqSmU2onc8Y4LX]
 label = FreeJournal Main Channel
 enabled = true
 decoy = false
 noncetrialsperbyte = 1000
 payloadlengthextrabytes = 1000
-privsigningkey = 5J3WLPnGPcKxsx8Vk24WH4VLzaEZ3xLTCjsc1xaha9HdZPbgWbT
-privencryptionkey = 5KbHD145pnNGcTnZ3kSL3RzHxc3zoUuBWLS8Z51w1dRkj9JVWZf
+privsigningkey = 5JpM4gp7Geaectw3tSzfJftKSAENCi7a2hB3HuXVDSwPNekTWh8
+privencryptionkey = 5JTi7gTKMJ6Qgoh47j9fPEWTqcdTBxhXLa3p7Y9DRtNXshNLaib

@@ -13,7 +13,9 @@ class FreenetConnection:
     '''
     def put(self,data):
         uri = self.fcpNode.put(data=data, mimetype="text/plain", chkonly=True)
-        job = self.fcpNode.put(data=data, mimetype="text/plain", async=True)
+        print("Inserting " + str(uri))
+        print("Please wait for insert to finish before publishing collection")
+        job = self.fcpNode.put(data=data, mimetype="text/plain", async=False)
         return uri
 
     '''

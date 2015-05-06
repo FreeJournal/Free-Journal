@@ -25,7 +25,7 @@ BITMESSAGE_SERVER = "http://username:password@0.0.0.0:8442/"
 
 ''' Don't change this unless the main channel address is changed in the future '''
 
-MAIN_CHANNEL_ADDRESS = "BM-2cXExRht8eiB7anRv8Rc3TvSTm4GcJ2Txx"
+MAIN_CHANNEL_ADDRESS = "BM-2cUtm3XCJ9tpa3TTVLuoiqSmU2onc8Y4LX"
 
 ''' Directory to store documents that are downloaded
 (Make sure to keep the last '/' at the end of the path)'''

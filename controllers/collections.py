@@ -92,6 +92,6 @@ def update_hash(collection):
         return
     collection_hash = CollectionVersion(root_hash=root_hash, document_ids = string, collection_version = collection.get_latest_version()+1,
                         collection_address = collection.address)
-    session.add(collection_hash)
     collection.version_list.append(collection_hash)
+    session.add(collection_hash)
     session.commit()
